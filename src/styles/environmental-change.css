@@ -1,0 +1,164 @@
+/* Environmental Change detail page styles */
+.main-content {
+    padding: 1rem 2rem;
+    max-width: none;
+    margin: 0;
+}
+
+/* Back button */
+.back-button {
+    margin-bottom: 1rem;
+}
+
+.back-link {
+    color: #374151;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: #1f2937;
+}
+
+/* Page header */
+.page-header {
+    margin-bottom: 3rem;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #456DAA;
+    margin: 0 0 1rem 0;
+    font-family: 'DT Getai Grotesk Display', 'Archivo Black', sans-serif;
+}
+
+.page-description {
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* View Gifs Section */
+.view-gifs-section {
+    margin-bottom: 2rem;
+}
+
+.view-gifs-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.view-gifs-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+.btn-filter {
+    background: transparent;
+    border: 1px solid #456DAA;
+    color: #456DAA;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-filter:hover {
+    background: #456DAA;
+    color: white;
+}
+
+/* Gifs Grid */
+.gifs-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+}
+
+.gif-item {
+    aspect-ratio: 1;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.gif-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.gif-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+}
+
+/* Placeholder gifs with varied colors - similar to feedback theme */
+.placeholder-gif-1 { background: linear-gradient(135deg, #059669, #047857); }
+.placeholder-gif-2 { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.placeholder-gif-3 { background: linear-gradient(135deg, #16a34a, #15803d); }
+.placeholder-gif-4 { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+.placeholder-gif-5 { background: linear-gradient(135deg, #7c2d12, #92400e); }
+.placeholder-gif-6 { background: linear-gradient(135deg, #065f46, #047857); }
+.placeholder-gif-7 { background: linear-gradient(135deg, #1e40af, #1d4ed8); }
+.placeholder-gif-8 { background: linear-gradient(135deg, #059669, #047857); }
+.placeholder-gif-9 { background: linear-gradient(135deg, #0891b2, #0e7490); }
+.placeholder-gif-10 { background: linear-gradient(135deg, #7c2d12, #a16207); }
+.placeholder-gif-11 { background: linear-gradient(135deg, #374151, #4b5563); }
+.placeholder-gif-12 { background: linear-gradient(135deg, #065f46, #047857); }
+.placeholder-gif-13 { background: linear-gradient(135deg, #1e3a8a, #1e40af); }
+.placeholder-gif-14 { background: linear-gradient(135deg, #7c2d12, #92400e); }
+.placeholder-gif-15 { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+.placeholder-gif-16 { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+.placeholder-gif-17 { background: linear-gradient(135deg, #059669, #047857); }
+.placeholder-gif-18 { background: linear-gradient(135deg, #0891b2, #0e7490); }
+.placeholder-gif-19 { background: linear-gradient(135deg, #7c2d12, #92400e); }
+.placeholder-gif-20 { background: linear-gradient(135deg, #1e40af, #1d4ed8); }
+.placeholder-gif-21 { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 1rem 1.5rem;
+    }
+    
+    .gifs-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .gifs-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .view-gifs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gifs-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

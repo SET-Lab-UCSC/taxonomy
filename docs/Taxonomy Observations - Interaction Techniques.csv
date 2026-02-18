@@ -1,0 +1,5 @@
+Interaction_Technique,Thumbnail,Description
+Raycast Selection,,"The user points a controller (or their finger) at an object, and a visible “laser” or line projects from their hand. When the beam intersects with an object, that object becomes highlighted. Pulling the trigger selects or activates the highlighted item from a distance without needing to physically touch it."
+Slashing,,"The user performs a fast, cutting motion with their hand or controller, usually while holding a virtual blade. When the motion passes through an object or enemy, it registers as a slash, causing damage, cutting effects, or splitting the object in two."
+Shooting,,"The user aims a virtual weapon at a target. When the trigger is pressed, a projectile is launched forward from the weapon. If it hits a valid target, it triggers an impact effect, such as damage, recoil, or a visual explosion."
+Grab and Place,,"The user reaches out to an object and grips it using a button or hand-tracking gesture. The object attaches to the user’s hand and follows its movement. The user can then move it to a new location and release it, placing it accurately in the environment."

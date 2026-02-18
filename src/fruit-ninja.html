@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit Ninja - Taxonomy of XR Interactions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Archivo+Black&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="./styles/fruit-ninja.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-buttons">
+            <button class="btn btn-outline">
+                Submit an observation
+            </button>
+            <button class="btn btn-primary">
+                About
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Back Button -->
+        <div class="back-button">
+            <a href="../applications.html" class="back-link">
+                ←
+            </a>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="title-section">
+                <h2 class="page-title">Fruit Ninja</h2>
+                <span class="year-badge">2010</span>
+            </div>
+            <p class="page-description">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec vestibulum nisl. Praesent sed ipsum
+                odio. Suspendisse aliquam nisl felis, sit amet condimentum tortor fermentum et. Proin et metus
+                consequat, maximus augue pulvinar, viverra ex. Sed vitae risus nisl. Nulla facilisi. Curabitur gravida
+                dictum tellus. Mauris bibendum, arcu nec mollis fringilla, erat nulla commodo arcu, malesuada mattis sem
+                ex ac felis. Nunc pulvinar, sem eu fermentum pharetra, sem purus efficitur nibh, sed scelerisque urna
+                massa ac quam. Quisque turpis neque, convallis quis imperdiet vitae, bibendum et arcu. Cras luctus
+                libero risus, sit amet dignissim lacus pulvinar feugiat. Etiam porttitor nisl vitae mi placerat, eget
+                bibendum eros placerat. Cras ligula justo, pellentesque sed ex vitae, tempus laoreet odio. Nulla
+                elementum metus in pellentesque gravida. Vivamus finibus felis tortor, eget condimentum lectus
+                consectetur et. Praesent quis augue vel tellus aliquet vehicula. Vestibulum turpis enim, facilisis ac
+                ante dolor, semper aliquam consequat vel enim. Mauris laoreet sem velit porta hendrerit, efficitur
+                interdum turpis posuere. Suspendisse vestibulum luctus augue, et cursus elit ornare eget. Aenean
+                malesuada, odio nec tristique molestie, nibh ipsum gravida magna, eget fermentum augue augue ut sem.
+                Cras et viverra diam, a varius ante. Nulla facilisi. Nulla neque dui, tristique a sem non, dapibus porta
+                dolor. Nunc faucibus dolor vel pretium vehicula. Sed vel erat ac augue pulvinar efficitur. Vivamus non
+                justo ullamcorper, vulputate sem sodales, pretium neque. Curabitur sed odio lobortis, fermentum quam ac,
+                cursus neque. Vestibulum tortor tellus, sodales et augue id, maximus imperdiet velit.
+            </p>
+        </div>
+
+        <!-- Carousel Section -->
+        <div class="carousel-section">
+            <div class="carousel-wrapper">
+                <button class="carousel-nav carousel-nav-left" onclick="moveCarousel(-1)">‹</button>
+                <div class="carousel-container" id="detailCarousel">
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-1"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-2"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-3"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-4"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-5"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-6"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-7"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-8"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-9"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-10"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-11"></div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image placeholder-image-12"></div>
+                    </div>
+                </div>
+                <button class="carousel-nav carousel-nav-right" onclick="moveCarousel(1)">›</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Carousel functionality
+        let currentDetailSlide = 0;
+        const itemsPerView = 6;
+        const totalItems = 12;
+
+        function moveCarousel(direction) {
+            const carousel = document.getElementById('detailCarousel');
+            const maxSlide = totalItems - itemsPerView;
+
+            currentDetailSlide += direction;
+
+            // Boundary checks
+            if (currentDetailSlide < 0) currentDetailSlide = 0;
+            if (currentDetailSlide > maxSlide) currentDetailSlide = maxSlide;
+
+            // Move carousel
+            const translateX = -currentDetailSlide * (220); // 200px width + 20px gap
+            carousel.style.transform = `translateX(${translateX}px)`;
+
+            // Update button states
+            const leftButton = document.querySelector('.carousel-nav-left');
+            const rightButton = document.querySelector('.carousel-nav-right');
+
+            leftButton.disabled = currentDetailSlide === 0;
+            rightButton.disabled = currentDetailSlide >= maxSlide;
+
+            leftButton.style.opacity = currentDetailSlide === 0 ? '0.5' : '1';
+            rightButton.style.opacity = currentDetailSlide >= maxSlide ? '0.5' : '1';
+        }
+
+        // Initialize carousel on load
+        document.addEventListener('DOMContentLoaded', function () {
+            moveCarousel(0); // Initialize button states
+        });
+
+        // Image click handler - add functionality here
+        document.querySelectorAll('.carousel-image').forEach((image, index) => {
+            image.addEventListener('click', function () {
+                console.log(`Image ${index + 1} clicked`);
+                // Add image viewing/modal functionality here
+            });
+        });
+    </script>
+</body>
+
+</html>

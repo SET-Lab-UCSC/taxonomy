@@ -1,0 +1,18 @@
+{
+  "name": "threejs-journey-exercise",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^5.3.3"
+  },
+  "dependencies": {
+    "papaparse": "^5.5.3",
+    "uniq": "^1.0.1",
+    "xhr": "^2.6.0"
+  }
+}

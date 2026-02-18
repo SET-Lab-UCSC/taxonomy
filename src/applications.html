@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications - Taxonomy of XR Interactions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Archivo+Black&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="./styles/applications.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-buttons">
+            <button class="btn btn-outline">
+                Submit an observation
+            </button>
+            <button class="btn btn-primary">
+                About
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Back Button -->
+        <div class="back-button">
+            <a href="./explore.html" class="back-link">
+                ←
+            </a>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2 class="page-title">Applications</h2>
+            <p class="page-description">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et maximus ante, a dapibus lacus.
+                Praesent accumsan malesuada odio sit amet blandit. Sed blandit justo et dui tincidunt, vitae ultrices
+                sem condimentum. Nullam ut consequat ante. Ut nunc lorem, placerat sed pretium porttitor, sollicitudin
+                laoreet nunc. Sed dictum ultrices felis, nec blandit leo. Proin vel porttitor mauris, a facilisis massa.
+            </p>
+        </div>
+
+        <!-- Applications Grid -->
+        <section class="section">
+            <div class="application-wrapper">
+                <div class="application-container">
+
+                </div>
+            </div>
+        </section>
+
+        <script type="module">
+            import { loadAppsAsJson } from "./convertJson.js";
+
+            document.addEventListener("DOMContentLoaded", async () => {
+                const submissions = await loadAppsAsJson();
+
+                const container = document.querySelector(".application-container");
+                container.innerHTML = "";
+
+                submissions.forEach(item => {
+                    const applicationItem = document.createElement("div");
+                    applicationItem.classList.add("application-item");
+
+                    applicationItem.innerHTML = `<img src="${item.Thumbnail}" alt="${item.Name || 'Submission'}" class="application-image" />
+        <p class="application-caption">${item.Name || "Untitled"}</p>
+      `;
+
+                    container.appendChild(applicationItem);
+                });
+
+                document.querySelectorAll(".application-image").forEach((img, index) => {
+                    img.addEventListener("click", () => {
+                        const submission = submissions[index]; // same ordering
+                        console.log(submission);
+                        // Fill modal
+                        document.getElementById("modal-gif").src = submission.Thumbnail;
+
+                        document.getElementById("modal-meta").innerHTML = `
+                    <p><strong>Name:</strong> ${submission.Name}</p>
+                    <p><strong>Year:</strong> ${submission.Year || "Unknown"}</p>
+                    <p><strong>Description:</strong> ${submission.Description || "No description"}</p>
+                    
+                `;
+
+                        document.getElementById("gif-modal").classList.remove("hidden");
+                    });
+                });
+
+                // Close button
+                document.getElementById("close-modal").addEventListener("click", () => {
+                    document.getElementById("gif-modal").classList.add("hidden");
+                });
+
+                // Optional: close modal when clicking background
+                document.getElementById("gif-modal").addEventListener("click", (e) => {
+                    if (e.target.id === "gif-modal") {
+                        document.getElementById("gif-modal").classList.add("hidden");
+                    }
+                });
+
+
+            });
+        </script>
+
+        <div id="gif-modal" class="modal hidden">
+            <div class="modal-content">
+                <span id="close-modal" class="modal-close">&times;</span>
+                <img id="modal-gif" />
+                <div id="modal-meta"></div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

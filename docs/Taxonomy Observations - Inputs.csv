@@ -1,0 +1,7 @@
+Inputs,Type,Thumbnail,Description
+Button Press,Controller,,Lapis
+Trigger Pull,Controller,,Lazui
+Grab,Controller,,Diamond
+Collision (extension),Hand Pose,,Gold
+Collision (hand),Hand Pose,,Emerald
+Pinch,Hand Gesture,,Iron

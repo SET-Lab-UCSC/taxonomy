@@ -1,0 +1,258 @@
+/* Applications page specific styles */
+.main-content {
+    padding: 1rem 2rem;
+    max-width: none;
+    margin: 0;
+}
+
+/* Back button */
+.back-button {
+    margin-bottom: 1rem;
+}
+
+.back-link {
+    color: #374151;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: #1f2937;
+}
+
+/* Page header */
+.page-header {
+    margin-bottom: 3rem;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #CD3735;
+    margin: 0 0 1rem 0;
+    font-family: 'DT Getai Grotesk Display', 'Archivo Black', sans-serif;
+}
+
+.page-description {
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Applications grid */
+.apps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.app-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.app-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.application-wrapper {
+    overflow-x: auto;
+    padding: 10px 0;
+}
+
+.application-container {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+}
+
+.application-item {
+    flex: 0 0 auto;
+    /* prevent shrinking */
+    text-align: center;
+}
+
+/* uniform image size */
+.application-item img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    /* crop while keeping shape */
+    border-radius: 10px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.carousel-caption {
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.app-image {
+    width: 100%;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.app-info {
+    padding: 1.5rem;
+}
+
+.app-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 1rem 0;
+    line-height: 1.3;
+}
+
+.app-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-gifs,
+.btn-more {
+    padding: 0.4rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid;
+}
+
+.btn-gifs {
+    background: transparent;
+    border-color: #FFCE7B;
+    color: #FFCE7B;
+}
+
+.btn-gifs:hover {
+    background: #FFCE7B;
+    color: white;
+}
+
+.btn-more {
+    background: #FFCE7B;
+    border-color: #FFCE7B;
+    color: white;
+}
+
+.btn-more:hover {
+    background: #f59e0b;
+    border-color: #f59e0b;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 1rem 1.5rem;
+    }
+
+    .apps-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .apps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .app-image {
+        height: 140px;
+    }
+
+    .app-info {
+        padding: 1rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .apps-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    /* top:0; left:0; bottom:0; right:0 */
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    /* ensure it appears above everything */
+}
+
+/* starts hidden */
+.hidden {
+    display: none;
+}
+
+/* modal box */
+.modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* close button */
+.modal-close {
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #555;
+}
+
+.modal-close:hover {
+    color: #000;
+}
+
+/* fade animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* modal image */
+#modal-gif {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Elements - Taxonomy of XR Interactions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Archivo+Black&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="./styles/inputs.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-buttons">
+            <button class="btn btn-outline">
+                Submit an observation
+            </button>
+            <button class="btn btn-primary">
+                About
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Back Button -->
+        <div class="back-button">
+            <a href="./explore.html" class="back-link">
+                ←
+            </a>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2 class="page-title">Inputs</h2>
+            <p class="page-description">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et maximus ante, a dapibus lacus.
+                Praesent accumsan malesuada odio sit amet blandit. Sed blandit justo et dui tincidunt, vitae ultrices
+                sem condimentum. Nullam ut consequat ante. Ut nunc lorem, placerat sed pretium porttitor, sollicitudin
+                laoreet nunc. Sed dictum ultrices felis, nec blandit leo. Proin vel porttitor mauris, a facilisis massa.
+            </p>
+        </div>
+
+        <!-- Interface Elements List -->
+        <section class="section">
+
+            <div class="tag-list">
+                <ul id="csv-list"></ul>
+            </div>
+        </section>
+        <script type="module">
+            import { loadObsAsJson, loadInputsAsJson } from "./convertJSON.js";
+            document.addEventListener("DOMContentLoaded", async () => {
+                const obsSubmissions = await loadObsAsJson();
+                const inputSubmissions = await loadInputsAsJson();
+                const submissions = Object.assign({}, obsSubmissions, inputSubmissions);
+                const list = document.getElementById("csv-list");
+                const elements = [];
+
+                // obsSubmissions.forEach(row => {
+
+                //     const values = row.Interface_Elements.split(",").map(v => v.trim());
+
+                //     if (!values[0]) {
+                //         return;
+                //     }
+                //     values.forEach(v => {
+                //         elements.push(v)
+                //     });
+                // });
+
+                inputSubmissions.forEach(row => {
+                    elements.push(row.Inputs);
+                });
+
+                const uniqueElements = [...new Set(elements)];
+                // uniqueElements.sort();
+
+                uniqueElements.forEach(value => {
+                    const li = document.createElement("li");
+                    li.classList.add("input-element");
+                    li.textContent = value;
+                    list.appendChild(li);
+                });
+
+                document.querySelectorAll(".input-element").forEach((element, index) => {
+                    element.addEventListener("click", () => {
+                        const submission = submissions[index];
+                        console.log(submission);
+
+                        document.getElementById("modal-meta").innerHTML = `
+                        <p><strong>Name:</strong> ${submission.Inputs}</p>
+                        <p><strong>Description:</strong> ${submission.Description || "No description"}</p>
+                    
+                        `;
+
+                        document.getElementById("gif-modal").classList.remove("hidden");
+
+
+                    });
+
+                    document.getElementById("close-modal").addEventListener("click", () => {
+                        document.getElementById("gif-modal").classList.add("hidden");
+                    });
+
+                    // Optional: close modal when clicking background
+                    document.getElementById("gif-modal").addEventListener("click", (e) => {
+                        if (e.target.id === "gif-modal") {
+                            document.getElementById("gif-modal").classList.add("hidden");
+                        }
+                    });
+                });
+            });
+        </script>
+        <div id="gif-modal" class="modal hidden">
+            <div class="modal-content">
+                <span id="close-modal" class="modal-close">&times;</span>
+                <div id="modal-meta"></div>
+            </div>
+    </main>
+</body>
+
+</html>

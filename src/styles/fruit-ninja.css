@@ -1,0 +1,187 @@
+/* Fruit Ninja detail page styles */
+.main-content {
+    padding: 1rem 2rem;
+    max-width: none;
+    margin: 0;
+}
+
+/* Back button */
+.back-button {
+    margin-bottom: 1rem;
+}
+
+.back-link {
+    color: #374151;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: #1f2937;
+}
+
+/* Page header */
+.page-header {
+    margin-bottom: 3rem;
+}
+
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #456DAA;
+    margin: 0;
+    font-family: 'DT Getai Grotesk Display', 'Archivo Black', sans-serif;
+}
+
+.year-badge {
+    background: #456DAA;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.page-description {
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Carousel section */
+.carousel-section {
+    margin-bottom: 2rem;
+}
+
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+}
+
+.carousel-nav {
+    background: white;
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.carousel-nav:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    color: #374151;
+}
+
+.carousel-nav:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.carousel-container {
+    display: flex;
+    gap: 1rem;
+    overflow: hidden;
+    flex: 1;
+    transition: transform 0.3s ease;
+}
+
+.carousel-item {
+    flex-shrink: 0;
+    width: 200px;
+    height: 150px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.carousel-image:hover {
+    transform: scale(1.02);
+}
+
+/* Placeholder images with different colors */
+.placeholder-image-1 { background: linear-gradient(135deg, #10b981, #059669); }
+.placeholder-image-2 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.placeholder-image-3 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.placeholder-image-4 { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.placeholder-image-5 { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+.placeholder-image-6 { background: linear-gradient(135deg, #84cc16, #65a30d); }
+.placeholder-image-7 { background: linear-gradient(135deg, #f97316, #ea580c); }
+.placeholder-image-8 { background: linear-gradient(135deg, #ec4899, #db2777); }
+.placeholder-image-9 { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+.placeholder-image-10 { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+.placeholder-image-11 { background: linear-gradient(135deg, #a855f7, #9333ea); }
+.placeholder-image-12 { background: linear-gradient(135deg, #22c55e, #16a34a); }
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 1rem 1.5rem;
+    }
+    
+    .carousel-item {
+        width: 160px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .title-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .carousel-wrapper {
+        padding: 1rem;
+    }
+    
+    .carousel-item {
+        width: 140px;
+        height: 100px;
+    }
+    
+    .carousel-nav {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1.25rem;
+    }
+}

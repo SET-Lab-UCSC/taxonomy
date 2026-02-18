@@ -1,0 +1,217 @@
+/* Tasks page specific styles */
+.main-content {
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Back button */
+.back-button {
+    margin-bottom: 1rem;
+}
+
+.back-link {
+    color: #374151;
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: #1f2937;
+}
+
+/* Page header */
+.page-header {
+    margin-bottom: 3rem;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #FFCE7B;
+    margin: 0 0 1rem 0;
+    font-family: 'DT Getai Grotesk Display', 'Archivo Black', sans-serif;
+}
+
+.page-description {
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Tasks grid */
+.tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.task-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.task-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.task-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.task-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0 0 0.5rem 0;
+}
+
+.task-description {
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+    flex-grow: 1;
+}
+
+.btn-more {
+    background: transparent;
+    border: 1px solid #FFCE7B;
+    color: #FFCE7B;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-end;
+}
+
+.btn-more:hover {
+    background: #FFCE7B;
+    color: white;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 1rem 1.5rem;
+    }
+
+    .tasks-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+
+    .tasks-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .task-card {
+        padding: 1.5rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+}
+
+.tag-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.tag-list ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-list li {
+    background: #f0f0f0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    /* top:0; left:0; bottom:0; right:0 */
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    /* ensure it appears above everything */
+}
+
+/* starts hidden */
+.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeIn 0.2s ease-out;
+}
+
+/* close button */
+.modal-close {
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #555;
+}
+
+.modal-close:hover {
+    color: #000;
+}
+
+/* fade animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* modal image */
+#modal-gif {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
