@@ -25,5 +25,5 @@ If adding a new page, add the source to `vite.config.js` ie. `explore: resolve(_
 3. Add `.csv` file to the `static` folder. 
 NOTE: Make sure the `.csv` filename stays the same ie. \\ 
 `Taxonomy Observations - Applications.csv` \\
-`Taxonomy Observatiosn - Observations.csv` \\ 
+`Taxonomy Observations - Observations.csv` \\ 
 4. Repeat steps 3-5 from *Development Instructions* to deploy new observations to Github Pages.
