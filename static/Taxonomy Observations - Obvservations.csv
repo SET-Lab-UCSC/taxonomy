@@ -11,3 +11,17 @@ Beat Saber Option Selection,,,,,,,,
 Beat Saber Striking Block,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/f0abce51-6a19-4eb4-f870-b272b4c21d00/public,,,,,,,https://youtu.be/py2bnYWhuJI?si=DvlAuKdV6XRj2nPJ
 Beat Saber Ducking,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/3110985c-c10f-446a-bb8b-7a8058020000/public,,,,,,,https://www.youtube.com/watch?v=eVyTtWR-sOs
 Beat Saber Dodging,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/b4b7b6ae-2ebc-45aa-6bea-1072f22ac200/public,,,,,,,https://youtu.be/py2bnYWhuJI?si=DvlAuKdV6XRj2nPJ
+VTOL Battery On,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/e3bfd084-3dec-4f75-ada5-9e2f01352500/public,VTOL VR,Selection,Trigger,"Haptic Bump, Button Hover Effect",Switch,Flick Switch,
+VTOL Joystick,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/4db5099f-6f6b-4ff1-0402-08949379a700/public,VTOL VR,Control,"Controller Pose, Trigger","Haptic Bump, Joint Moving",Joystick,Move Joystick,
+VTOL HUD Selection,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/57995846-8cd3-44ac-c4ac-db3fb29e5000/public,VTOL VR,Selection,Trigger,"Haptic Bump, Button Hover Effect",Button,Button Selection,
+VTOL Thumbstick,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/fea6bd72-9f18-4a5b-3408-3a210e0a9a00/public,VTOL VR,Control,"Controller Pose, Trigger",Joint Moving,Thumbstick,Move Thumbstick,
+VTOL Thruster Control,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/36c9555d-0891-4208-b4c8-1a02a8815d00/public,VTOL VR,Control,"Controller Pose, Trigger","Haptic Bump, Button Hover Effect",Lever,Drag,
+VTOL Number Selection,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/25bf9a3f-5734-4552-3b4c-2c88d9115800/public,VTOL VR,Selection,Trigger,"Haptic Bump, Button Hover Effect",Button,Button Selection,
+VTOL Knob Control,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/6d0384c3-84a5-4102-cac8-465bbc9b1c00/public,VTOL VR,Selection,Trigger,"Haptic Bump, Button Hover Effect",Knob,Knob Control,
+VTOL HUD Button Selection,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/228d549e-5c53-43c4-1085-31385aba9f00/public,VTOL VR,Selection,Trigger,"Haptic Bump, Button Hover Effect",Button,Button Selection,
+VTOL Seat Adjustment,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/1c041e12-1861-4572-bc05-aa4b11b4d700/public,VTOL VR,Control,Trigger,"Haptic Bump, Button Hover Effect",Button,Button Selection,
+Fruit Ninja Grab Object,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/da2b7e5c-639b-4b9c-ee8a-143548f65e00/public,Fruit Ninja,Selection,"Controller Pose, Trigger",Haptic Bump,Raycast Pointer,,
+Fruit Ninja Button Click,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/9e4bb2ae-e4eb-49c9-dbc1-c688e3b71200/public,Fruit Ninja,Selection,"Controller Pose, Trigger",Haptic Bump,Button,,
+Fruit Ninja Slice Object,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/218f5dde-1776-42aa-1753-d71e141fd200/public,Fruit Ninja,Aim,"Controller Pose, Trigger",Haptic Bump,Raycast Pointer,,
+Fruit Ninja Teleport,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/d2f18e16-0fa3-4c6f-b049-93c1acc29400/public,Fruit Ninja,,"Controller Pose, Trigger",Haptic Bump,Raycast Pointer,,
+Fruit Ninja Scroll Screen,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/d7b43bdf-a2a0-4874-da64-e5aba47a9400/public,Fruit Ninja,Swipe,,,,,
