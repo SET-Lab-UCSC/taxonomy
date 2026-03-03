@@ -1,4 +1,11 @@
-Name,Year,Description,Thumbnail
-Spongebob,1990s,"A sample application that we use. Spongebob, an American cultural enigma, continues to persist as a dominant meme in contemporary comedy.",https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/ad5a4080-2498-48de-8417-567e9428a300/public
-Beat Saber,2018,A virtual rhythm game.,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/74dc5f02-d0d0-43bd-f248-cef1e18db500/public
-Fruit Ninja,2019,A fruit cutting game.,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/304d4916-15da-4fe4-7c82-f40d81f11800/public
+Name,Year,Description,Thumbnail,Assignee
+Spongebob,1990s,"A sample application that we use. Spongebob, an American cultural enigma, continues to persist as a dominant meme in contemporary comedy.",https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/ad5a4080-2498-48de-8417-567e9428a300/public,
+Beat Saber,2018,A virtual rhythm game.,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/74dc5f02-d0d0-43bd-f248-cef1e18db500/public,
+Fruit Ninja,2019,A fruit cutting game.,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/304d4916-15da-4fe4-7c82-f40d81f11800/public,
+Oculus First Steps,,,,Veronica (time permitting)
+Roblox,,,,Marisa
+Archery Pro,2024,An archery game,,Marisa
+War of Wizards,,,,Veronica
+Forever Pets,,,,Veronica
+Half Life: Alyx,2020,"Half-Life: Alyx is a 2020 virtual reality (VR) first-person shooter game developed and published by Valve. It was released for Windows on March 23, 2020, and for Linux on May 15, with support for most PC-compatible VR headsets. Players control Alyx Vance on a mission to seize a superweapon belonging to the alien Combine before the events of Half-Life 2 (2004). Like previous Half-Life games, Alyx incorporates combat, puzzles and exploration. Players use VR to interact with the environment and fight enemies, using ""gravity gloves"" to snatch objects from a distance, similarly to the gravity gun from Half-Life 2.",https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/b45e9d22-1613-4622-17b9-4d2ee035eb00/public,
+VTOL VR,2020,"VTOL VR is a near-future VR mil-fantasy flight game developed by Paolo Encarnación, also known as BahamutoD, of Boundless Dynamics, original creator of the BDArmory mod for Kerbal Space Program. It is centered around air combat, putting players in one of three aircraft in a military environment. Players can interact with each button and switch in their cockpit to control their aircraft; no keyboard or even HOTAS interaction is required. Players can take on a number of different enemies, including hostile aircraft, ground units, and even naval ships with a plethora of strong weaponry.",https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/89195c7c-0031-4a0b-642f-579de5007e00/public,
