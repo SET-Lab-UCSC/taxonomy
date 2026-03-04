@@ -1,7 +1,7 @@
 import Papa from "papaparse";
 
 export async function loadObsAsJson() {
-    const response = await fetch("./Taxonomy Observations - Obvservations.csv");
+    const response = await fetch("./Taxonomy Observations - Observations.csv");
     const csvText = await response.text();
 
     const parsed = Papa.parse(csvText, {
