@@ -1,30 +1,29 @@
 import "./modulepreload-polyfill-DaKOjhqt.js";
 /* empty css                */
-import { l as loadObsAsJson, e as loadTechAsJson } from "./csvtojson-CRSdwkOB.js";
+import { l as loadObsAsJson, f as loadInputsAsJson } from "./csvtojson-CRp_4eyR.js";
+import "./papaparse.min-DOsBUvb2.js";
 document.addEventListener("DOMContentLoaded", async () => {
   const obsSubmissions = await loadObsAsJson();
-  const techSubmissions = await loadTechAsJson();
-  const submissions = Object.assign({}, obsSubmissions, techSubmissions);
-  console.log(typeof obsSubmissions);
-  console.log(typeof submissions);
+  const inputSubmissions = await loadInputsAsJson();
+  const submissions = Object.assign({}, obsSubmissions, inputSubmissions);
   const list = document.getElementById("csv-list");
   const elements = [];
-  techSubmissions.forEach((row) => {
-    elements.push(row.Interaction_Technique);
+  inputSubmissions.forEach((row) => {
+    elements.push(row.Inputs);
   });
   const uniqueElements = [...new Set(elements)];
   uniqueElements.forEach((value) => {
     const li = document.createElement("li");
-    li.classList.add("interaction-element");
+    li.classList.add("input-element");
     li.textContent = value;
     list.appendChild(li);
   });
-  document.querySelectorAll(".interaction-element").forEach((element, index) => {
+  document.querySelectorAll(".input-element").forEach((element, index) => {
     element.addEventListener("click", () => {
       const submission = submissions[index];
       console.log(submission);
       document.getElementById("modal-meta").innerHTML = `
-                        <p><strong>Name:</strong> ${submission.Interaction_Technique}</p>
+                        <p><strong>Name:</strong> ${submission.Inputs}</p>
                         <p><strong>Description:</strong> ${submission.Description || "No description"}</p>
                     
                         `;
@@ -40,4 +39,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 });
-//# sourceMappingURL=intertech-DFJM4L4-.js.map
+//# sourceMappingURL=inputs-72JnuhFV.js.map

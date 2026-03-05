@@ -1,28 +1,29 @@
 import "./modulepreload-polyfill-DaKOjhqt.js";
 /* empty css                */
-import { l as loadObsAsJson, c as loadFeedAsJson } from "./csvtojson-CRSdwkOB.js";
+import { l as loadObsAsJson, a as loadTasksAsJson } from "./csvtojson-CRp_4eyR.js";
+import "./papaparse.min-DOsBUvb2.js";
 document.addEventListener("DOMContentLoaded", async () => {
   const obsSubmissions = await loadObsAsJson();
-  const feedSubmissions = await loadFeedAsJson();
-  const submissions = Object.assign({}, obsSubmissions, feedSubmissions);
+  const taskSubmissions = await loadTasksAsJson();
+  const submissions = Object.assign({}, obsSubmissions, taskSubmissions);
   const list = document.getElementById("csv-list");
   const elements = [];
-  feedSubmissions.forEach((row) => {
-    elements.push(row.Feedback);
+  taskSubmissions.forEach((row) => {
+    elements.push(row.Tasks);
   });
   const uniqueElements = [...new Set(elements)];
   uniqueElements.forEach((value) => {
     const li = document.createElement("li");
-    li.classList.add("feedback-element");
+    li.classList.add("interaction-element");
     li.textContent = value;
     list.appendChild(li);
   });
-  document.querySelectorAll(".feedback-element").forEach((element, index) => {
+  document.querySelectorAll(".interaction-element").forEach((element, index) => {
     element.addEventListener("click", () => {
       const submission = submissions[index];
       console.log(submission);
       document.getElementById("modal-meta").innerHTML = `
-                        <p><strong>Name:</strong> ${submission.Feedback}</p>
+                        <p><strong>Name:</strong> ${submission.Tasks}</p>
                         <p><strong>Description:</strong> ${submission.Description || "No description"}</p>
                     
                         `;
@@ -38,4 +39,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 });
-//# sourceMappingURL=feedback-Bt54SRdg.js.map
+//# sourceMappingURL=tasks-pPU55T5J.js.map

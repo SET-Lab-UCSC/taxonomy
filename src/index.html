@@ -57,14 +57,51 @@
 
     <main class="home-main">
         <div class="home-content">
-            <div class="home-placeholder">
-                <div>
-                    <p>info vis incoming here</p>
-                    <p>SUMMER 2025</p>
+            <section class="dashboard-section">
+                <h2 class="section-title">Taxonomy Coverage</h2>
+                <div class="metrics-container">
+                    <div id="applications-metric"></div>
+                    <div id="techniques-metric"></div>
+                    <div id="observations-metric"></div>
+                    <div id="tasks-metric"></div>
+                    <div id="inputs-metric"></div>
+                    <div id="interface-elements-metric"></div>
+                    <div id="feedback-metric"></div>
                 </div>
-            </div>
+            </section>
         </div>
     </main>
+
+    <script type="module">
+        import { loadDashboardData } from './dashboardData.js';
+        import { renderDashboard, destroyCharts } from './dashboardVisualization.js';
+
+        async function initDashboard() {
+            try {
+                const data = await loadDashboardData();
+
+                if (data.error) {
+                    console.error('Dashboard error:', data.error);
+                    document.querySelector('.home-content').innerHTML = `
+                        <div style="color: #dc2626; padding: 2rem; text-align: center;">
+                            <p>Error loading data. Check console for details.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                renderDashboard(data);
+                console.log('✓ Dashboard initialized');
+            } catch (error) {
+                console.error('Dashboard init error:', error);
+            }
+        }
+
+        initDashboard();
+
+        // Cleanup on page unload
+        window.addEventListener('unload', destroyCharts);
+    </script>
 </body>
 
 </html>

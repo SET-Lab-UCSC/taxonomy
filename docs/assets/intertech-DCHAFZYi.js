@@ -1,14 +1,17 @@
 import "./modulepreload-polyfill-DaKOjhqt.js";
 /* empty css                */
-import { l as loadObsAsJson, a as loadTasksAsJson } from "./csvtojson-CRSdwkOB.js";
+import { l as loadObsAsJson, e as loadTechAsJson } from "./csvtojson-CRp_4eyR.js";
+import "./papaparse.min-DOsBUvb2.js";
 document.addEventListener("DOMContentLoaded", async () => {
   const obsSubmissions = await loadObsAsJson();
-  const taskSubmissions = await loadTasksAsJson();
-  const submissions = Object.assign({}, obsSubmissions, taskSubmissions);
+  const techSubmissions = await loadTechAsJson();
+  const submissions = Object.assign({}, obsSubmissions, techSubmissions);
+  console.log(typeof obsSubmissions);
+  console.log(typeof submissions);
   const list = document.getElementById("csv-list");
   const elements = [];
-  taskSubmissions.forEach((row) => {
-    elements.push(row.Tasks);
+  techSubmissions.forEach((row) => {
+    elements.push(row.Interaction_Technique);
   });
   const uniqueElements = [...new Set(elements)];
   uniqueElements.forEach((value) => {
@@ -22,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const submission = submissions[index];
       console.log(submission);
       document.getElementById("modal-meta").innerHTML = `
-                        <p><strong>Name:</strong> ${submission.Tasks}</p>
+                        <p><strong>Name:</strong> ${submission.Interaction_Technique}</p>
                         <p><strong>Description:</strong> ${submission.Description || "No description"}</p>
                     
                         `;
@@ -38,4 +41,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 });
-//# sourceMappingURL=tasks-DR-dzaUe.js.map
+//# sourceMappingURL=intertech-DCHAFZYi.js.map

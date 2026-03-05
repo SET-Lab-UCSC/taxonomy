@@ -1,6 +1,7 @@
 import "./modulepreload-polyfill-DaKOjhqt.js";
 /* empty css                */
-import { b as loadAppsAsJson } from "./csvtojson-CRSdwkOB.js";
+import { b as loadAppsAsJson } from "./csvtojson-CRp_4eyR.js";
+import "./papaparse.min-DOsBUvb2.js";
 document.addEventListener("DOMContentLoaded", async () => {
   const submissions = await loadAppsAsJson();
   const container = document.querySelector(".application-container");
@@ -36,4 +37,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
-//# sourceMappingURL=applications-CZ2effC7.js.map
+//# sourceMappingURL=applications-Dnb-j3Of.js.map

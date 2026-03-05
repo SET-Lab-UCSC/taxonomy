@@ -1,6 +1,7 @@
 import "./modulepreload-polyfill-DaKOjhqt.js";
 /* empty css                */
-import { l as loadObsAsJson } from "./csvtojson-CRSdwkOB.js";
+import { l as loadObsAsJson } from "./csvtojson-CRp_4eyR.js";
+import "./papaparse.min-DOsBUvb2.js";
 document.addEventListener("DOMContentLoaded", async () => {
   const submissions = await loadObsAsJson();
   submissions.reverse();
@@ -47,4 +48,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
-//# sourceMappingURL=explore-P3ZTIPEh.js.map
+//# sourceMappingURL=explore-Aoy4yht9.js.map
