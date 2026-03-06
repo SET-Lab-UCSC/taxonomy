@@ -37,4 +37,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
-//# sourceMappingURL=applications-Dnb-j3Of.js.map
+//# sourceMappingURL=applications-DVSu2v-C.js.map

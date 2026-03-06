@@ -4,7 +4,7 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
 import "./modulepreload-polyfill-DaKOjhqt.js";
 /* empty css                */
 import { P as Papa } from "./papaparse.min-DOsBUvb2.js";
-async function loadObservationsCSV() {
+async function loadObservationsCSV$1() {
   const basePath = "https://set-lab-ucsc.github.io/taxonomy/";
   const fileName = "Taxonomy Observations - Observations.csv";
   const paths = [
@@ -203,7 +203,7 @@ function getFeedbackCount(feedback) {
 async function loadDashboardData() {
   try {
     console.log("Loading dashboard data...");
-    const observations = await loadObservationsCSV();
+    const observations = await loadObservationsCSV$1();
     const techniques = await loadTechniquesCSV();
     const tasks = await loadTasksCSV();
     const inputs = await loadInputsCSV();
@@ -225,7 +225,7 @@ async function loadDashboardData() {
       inputsCount: inputCount,
       interfaceElementsCount: interfaceCount,
       feedbackCount,
-      totalObservations: observations.filter((o) => o.Title && o.Title.trim()).length
+      totalObservations: observations.length
     };
     console.log("Dashboard data:", data);
     return data;
@@ -14800,6 +14800,337 @@ function destroyCharts() {
   });
   chartInstances = [];
 }
+let currentChart = null;
+let allObservations = [];
+let allInputs = [];
+let allTasks = [];
+let allInterfaceElements = [];
+let allFeedback = [];
+let techniqueApplications = {};
+let currentFilters = {
+  inputs: [],
+  tasks: [],
+  interfaceElements: [],
+  feedback: []
+};
+async function loadObservationsCSV() {
+  const basePath = "https://set-lab-ucsc.github.io/taxonomy/";
+  const fileName = "Taxonomy Observations - Observations.csv";
+  const paths = [`./${fileName}`, `${basePath}${fileName}`, `/${fileName}`];
+  for (const path of paths) {
+    try {
+      const response = await fetch(path);
+      if (response.ok) {
+        const csvText = await response.text();
+        const parsed = Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true,
+          transformHeader: (h) => h.trim()
+        });
+        return parsed.data;
+      }
+    } catch (e) {
+      continue;
+    }
+  }
+  throw new Error("Failed to load observations");
+}
+function getUniqueValues(data, fieldName) {
+  const values = /* @__PURE__ */ new Set();
+  data.forEach((item) => {
+    if (item[fieldName] && item[fieldName].trim()) {
+      const entries = item[fieldName].split(",").map((v) => v.trim()).filter((v) => v);
+      entries.forEach((e) => values.add(e));
+    }
+  });
+  return Array.from(values).sort();
+}
+function matchesFilters(observation) {
+  const hasInputFilter = currentFilters.inputs.length > 0;
+  const hasTaskFilter = currentFilters.tasks.length > 0;
+  const hasElementFilter = currentFilters.interfaceElements.length > 0;
+  const hasFeedbackFilter = currentFilters.feedback.length > 0;
+  if (hasInputFilter) {
+    const obsInputs = (observation.Input || "").split(",").map((v) => v.trim()).filter((v) => v);
+    if (!currentFilters.inputs.some((f) => obsInputs.includes(f))) return false;
+  }
+  if (hasTaskFilter) {
+    const obsTasks = (observation.Task || "").split(",").map((v) => v.trim()).filter((v) => v);
+    if (!currentFilters.tasks.some((f) => obsTasks.includes(f))) return false;
+  }
+  if (hasElementFilter) {
+    const obsElements = (observation.Interface_Element || "").split(",").map((v) => v.trim()).filter((v) => v);
+    if (!currentFilters.interfaceElements.some((f) => obsElements.includes(f))) return false;
+  }
+  if (hasFeedbackFilter) {
+    const obsFeedback = (observation.Feedback || "").split(",").map((v) => v.trim()).filter((v) => v);
+    if (!currentFilters.feedback.some((f) => obsFeedback.includes(f))) return false;
+  }
+  if (!hasInputFilter && !hasTaskFilter && !hasElementFilter && !hasFeedbackFilter) return true;
+  return true;
+}
+function calculateTechniqueFrequencies() {
+  const frequencies = {};
+  techniqueApplications = {};
+  allObservations.forEach((obs) => {
+    if (!matchesFilters(obs)) return;
+    const techniques = (obs.Interaction_Technique || "").split(",").map((v) => v.trim()).filter((v) => v);
+    const application = (obs.Application || "").trim();
+    techniques.forEach((technique) => {
+      frequencies[technique] = (frequencies[technique] || 0) + 1;
+      if (!techniqueApplications[technique]) {
+        techniqueApplications[technique] = /* @__PURE__ */ new Set();
+      }
+      if (application) {
+        techniqueApplications[technique].add(application);
+      }
+    });
+  });
+  const sorted = Object.entries(frequencies).sort((a, b) => b[1] - a[1]).reduce((obj, [key, value]) => {
+    obj[key] = value;
+    return obj;
+  }, {});
+  return sorted;
+}
+function renderChart() {
+  const frequencies = calculateTechniqueFrequencies();
+  const labels = Object.keys(frequencies);
+  const data = Object.values(frequencies);
+  const ctx = document.getElementById("techniquesChart");
+  if (!ctx) return;
+  if (currentChart) {
+    currentChart.destroy();
+  }
+  currentChart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Frequency",
+          data,
+          backgroundColor: "rgba(255, 206, 123, 0.8)",
+          borderColor: "rgba(206, 55, 53, 1)",
+          borderWidth: 2,
+          borderRadius: 4,
+          hoverBackgroundColor: "rgba(206, 55, 53, 0.8)"
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      onClick: (event, elements2) => {
+        if (elements2.length > 0) {
+          const element = elements2[0];
+          const technique = currentChart.data.labels[element.index];
+          const frequency = currentChart.data.datasets[0].data[element.index];
+          const applications = techniqueApplications[technique] || /* @__PURE__ */ new Set();
+          showTechniquesModal(technique, frequency, applications);
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: "top"
+        },
+        tooltip: {
+          backgroundColor: "rgba(0, 0, 0, 0.8)",
+          padding: 12,
+          titleFont: { size: 14, weight: "bold" },
+          bodyFont: { size: 12 },
+          borderColor: "rgba(206, 55, 53, 1)",
+          borderWidth: 1,
+          displayColors: false,
+          callbacks: {
+            title: (context) => {
+              return context[0].label;
+            },
+            label: () => {
+              return "";
+            },
+            afterLabel: (context) => {
+              const technique = context.label;
+              const frequency = context.parsed.y;
+              const applications = techniqueApplications[technique] || /* @__PURE__ */ new Set();
+              let text = `Frequency: ${frequency}
+
+Applications:
+`;
+              if (applications.size > 0) {
+                text += Array.from(applications).sort().join("\n");
+              } else {
+                text += "No applications found";
+              }
+              return text;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1
+          },
+          title: {
+            display: true,
+            text: "Frequency"
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: "Interaction Techniques"
+          }
+        }
+      }
+    }
+  });
+}
+function initializeFilters() {
+  const filterContainer = document.getElementById("filterContainer");
+  if (!filterContainer) return;
+  const filterSections = [
+    {
+      name: "Inputs",
+      key: "inputs",
+      values: allInputs
+    },
+    {
+      name: "Tasks",
+      key: "tasks",
+      values: allTasks
+    },
+    {
+      name: "Interface Elements",
+      key: "interfaceElements",
+      values: allInterfaceElements
+    },
+    {
+      name: "Feedback",
+      key: "feedback",
+      values: allFeedback
+    }
+  ];
+  filterContainer.innerHTML = "";
+  filterSections.forEach((section) => {
+    const dropdownDiv = document.createElement("div");
+    dropdownDiv.className = "filter-dropdown";
+    const button = document.createElement("button");
+    button.className = "dropdown-btn";
+    button.textContent = section.name;
+    button.setAttribute("aria-expanded", "false");
+    const menu = document.createElement("div");
+    menu.className = "dropdown-menu";
+    menu.style.display = "none";
+    section.values.forEach((value) => {
+      const option = document.createElement("label");
+      option.className = "dropdown-option";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = value;
+      checkbox.addEventListener("change", () => {
+        toggleFilter(section.key, value, checkbox);
+      });
+      const label = document.createElement("span");
+      label.textContent = value;
+      option.appendChild(checkbox);
+      option.appendChild(label);
+      menu.appendChild(option);
+    });
+    button.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = menu.style.display !== "none";
+      menu.style.display = isOpen ? "none" : "block";
+      button.setAttribute("aria-expanded", !isOpen);
+    });
+    dropdownDiv.appendChild(button);
+    dropdownDiv.appendChild(menu);
+    filterContainer.appendChild(dropdownDiv);
+  });
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".dropdown-menu").forEach((menu) => {
+      menu.style.display = "none";
+    });
+    document.querySelectorAll(".dropdown-btn").forEach((btn) => {
+      btn.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+function toggleFilter(filterKey, value, checkboxElement) {
+  const filterArray = currentFilters[filterKey];
+  const index2 = filterArray.indexOf(value);
+  if (index2 > -1) {
+    filterArray.splice(index2, 1);
+    checkboxElement.checked = false;
+  } else {
+    filterArray.push(value);
+    checkboxElement.checked = true;
+  }
+  renderChart();
+}
+function showTechniquesModal(technique, frequency, applications) {
+  const modal = document.getElementById("techniquesModal");
+  if (!modal) return;
+  document.getElementById("modalTechniqueName").textContent = technique;
+  document.getElementById("modalFrequency").textContent = `Frequency: ${frequency}`;
+  const appsList = document.getElementById("modalApplicationsList");
+  appsList.innerHTML = "<h3>Applications:</h3>";
+  if (applications.size > 0) {
+    const ul = document.createElement("ul");
+    Array.from(applications).sort().forEach((app) => {
+      const li = document.createElement("li");
+      li.textContent = app;
+      ul.appendChild(li);
+    });
+    appsList.appendChild(ul);
+  } else {
+    const p = document.createElement("p");
+    p.textContent = "No applications found";
+    appsList.appendChild(p);
+  }
+  modal.classList.remove("hidden");
+}
+function initializeModalHandlers() {
+  const modal = document.getElementById("techniquesModal");
+  const closeBtn = document.getElementById("closeTechniquesModal");
+  if (!modal || !closeBtn) return;
+  closeBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+  modal.addEventListener("click", (e) => {
+    if (e.target.id === "techniquesModal") {
+      modal.classList.add("hidden");
+    }
+  });
+}
+async function initInteractionTechniquesChart() {
+  try {
+    console.log("Loading interaction techniques data...");
+    allObservations = await loadObservationsCSV();
+    allInputs = getUniqueValues(allObservations, "Input");
+    allTasks = getUniqueValues(allObservations, "Task");
+    allInterfaceElements = getUniqueValues(allObservations, "Interface_Element");
+    allFeedback = getUniqueValues(allObservations, "Feedback");
+    console.log("✓ Data loaded");
+    console.log("Inputs:", allInputs);
+    console.log("Tasks:", allTasks);
+    console.log("Interface Elements:", allInterfaceElements);
+    console.log("Feedback:", allFeedback);
+    initializeFilters();
+    initializeModalHandlers();
+    renderChart();
+  } catch (error) {
+    console.error("Error initializing chart:", error);
+    const container = document.getElementById("chartContainer");
+    if (container) {
+      container.innerHTML = `<div style="color: #dc2626; padding: 2rem; text-align: center;">
+                <p>Error loading data. Check console for details.</p>
+            </div>`;
+    }
+  }
+}
 async function initDashboard() {
   try {
     const data = await loadDashboardData();
@@ -14818,6 +15149,15 @@ async function initDashboard() {
     console.error("Dashboard init error:", error);
   }
 }
+async function initCharts() {
+  try {
+    await initInteractionTechniquesChart();
+    console.log("✓ Interaction techniques chart initialized");
+  } catch (error) {
+    console.error("Chart init error:", error);
+  }
+}
 initDashboard();
+initCharts();
 window.addEventListener("unload", destroyCharts);
-//# sourceMappingURL=index-CCDqn_3n.js.map
+//# sourceMappingURL=index-m616Y2Kd.js.map

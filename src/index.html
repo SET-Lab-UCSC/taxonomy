@@ -57,6 +57,16 @@
 
     <main class="home-main">
         <div class="home-content">
+            <section class="interaction-chart-section">
+                <div class="chart-header">
+                    <h2 class="section-title">Interaction Techniques Analysis</h2>
+                    <div id="filterContainer" class="filter-dropdown-container"></div>
+
+                </div>
+                <div id="chartContainer" class="chart-container">
+                    <canvas id="techniquesChart"></canvas>
+                </div>
+            </section>
             <section class="dashboard-section">
                 <h2 class="section-title">Taxonomy Coverage</h2>
                 <div class="metrics-container">
@@ -69,12 +79,16 @@
                     <div id="feedback-metric"></div>
                 </div>
             </section>
+
+            <!-- Interaction Techniques Chart Section -->
+
         </div>
     </main>
 
     <script type="module">
         import { loadDashboardData } from './dashboardData.js';
         import { renderDashboard, destroyCharts } from './dashboardVisualization.js';
+        import { initInteractionTechniquesChart } from './interactionTechniquesChart.js';
 
         async function initDashboard() {
             try {
@@ -97,11 +111,31 @@
             }
         }
 
+        async function initCharts() {
+            try {
+                await initInteractionTechniquesChart();
+                console.log('✓ Interaction techniques chart initialized');
+            } catch (error) {
+                console.error('Chart init error:', error);
+            }
+        }
+
         initDashboard();
+        initCharts();
 
         // Cleanup on page unload
         window.addEventListener('unload', destroyCharts);
     </script>
+
+    <!-- Modal for showing applications -->
+    <div id="techniquesModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeTechniquesModal" class="modal-close">&times;</span>
+            <h2 id="modalTechniqueName"></h2>
+            <div id="modalApplicationsList"></div>
+            <p id="modalFrequency"></p>
+        </div>
+    </div>
 </body>
 
 </html>
