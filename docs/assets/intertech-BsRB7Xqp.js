@@ -1,29 +1,31 @@
 import "./modulepreload-polyfill-DaKOjhqt.js";
 /* empty css                */
-import { l as loadObsAsJson, d as loadFaceAsJson } from "./csvtojson-CRp_4eyR.js";
+import { l as loadObsAsJson, e as loadTechAsJson } from "./csvtojson-CRp_4eyR.js";
 import "./papaparse.min-DOsBUvb2.js";
 document.addEventListener("DOMContentLoaded", async () => {
   const obsSubmissions = await loadObsAsJson();
-  const faceSumissions = await loadFaceAsJson();
-  const submissions = Object.assign({}, obsSubmissions, faceSumissions);
+  const techSubmissions = await loadTechAsJson();
+  const submissions = Object.assign({}, obsSubmissions, techSubmissions);
+  console.log(typeof obsSubmissions);
+  console.log(typeof submissions);
   const list = document.getElementById("csv-list");
   const elements = [];
-  faceSumissions.forEach((row) => {
-    elements.push(row.Interface_Element);
+  techSubmissions.forEach((row) => {
+    elements.push(row.Interaction_Technique);
   });
   const uniqueElements = [...new Set(elements)];
   uniqueElements.forEach((value) => {
     const li = document.createElement("li");
-    li.classList.add("interface-element");
+    li.classList.add("interaction-element");
     li.textContent = value;
     list.appendChild(li);
   });
-  document.querySelectorAll(".interface-element").forEach((element, index) => {
+  document.querySelectorAll(".interaction-element").forEach((element, index) => {
     element.addEventListener("click", () => {
       const submission = submissions[index];
       console.log(submission);
       document.getElementById("modal-meta").innerHTML = `
-                        <p><strong>Name:</strong> ${submission.Interface_Element}</p>
+                        <p><strong>Name:</strong> ${submission.Interaction_Technique}</p>
                         <p><strong>Description:</strong> ${submission.Description || "No description"}</p>
                     
                         `;
@@ -39,4 +41,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 });
-//# sourceMappingURL=interface-DrNgLoUS.js.map
+//# sourceMappingURL=intertech-BsRB7Xqp.js.map

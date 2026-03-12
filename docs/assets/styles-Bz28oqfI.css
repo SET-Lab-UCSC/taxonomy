@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'DT Getai Grotesk Display';
     src: url('https://set-lab-ucsc.github.io/taxonomy/assets/DTGetaiGroteskDisplay-Black-WnMDOzuF.ttf') format('truetype'),
-         url('https://set-lab-ucsc.github.io/taxonomy/assets/DTGetaiGroteskDisplay-Black-DwXJjRPG.otf') format('opentype');
+        url('https://set-lab-ucsc.github.io/taxonomy/assets/DTGetaiGroteskDisplay-Black-DwXJjRPG.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -63,13 +63,15 @@ body {
 
 .gradient-text {
     font-weight: bold;
-    font-size: 2.5rem; 
+    font-size: 2.5rem;
     background: linear-gradient(90deg, #FFCE7B, #E98708, #CD3735);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    color: transparent; /* Fallback for browsers that don't support background-clip */
-    display: inline-block; /* Helps with gradient rendering */
+    color: transparent;
+    /* Fallback for browsers that don't support background-clip */
+    display: inline-block;
+    /* Helps with gradient rendering */
 }
 
 .site-title:hover {
@@ -265,11 +267,11 @@ body {
     .header {
         padding: 2rem 3rem;
     }
-    
+
     .back-nav {
         padding: 0.5rem 3rem;
     }
-    
+
     .nav-bar {
         padding: 1.5rem 3rem;
     }
