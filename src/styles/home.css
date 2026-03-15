@@ -396,9 +396,13 @@
   border: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   margin-bottom: 3rem;
+  min-height: 460px;
 }
 
 #techniquesChart {
+  display: block;
+  width: 100% !important;
+  height: 420px !important;
   max-height: 500px;
 }
 
@@ -425,6 +429,7 @@
 
   .chart-container {
     padding: 1.5rem;
+    min-height: 380px;
   }
 
   .dropdown-menu {

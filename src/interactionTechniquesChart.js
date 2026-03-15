@@ -8,6 +8,8 @@ let allTasks = [];
 let allInterfaceElements = [];
 let allFeedback = [];
 let techniqueApplications = {}; // Store applications for each technique
+let resizeTimeout = null;
+let chartResizeHandler = null;
 let currentFilters = {
     inputs: [],
     tasks: [],
@@ -162,7 +164,7 @@ function renderChart() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             onClick: (event, elements) => {
                 if (elements.length > 0) {
                     const element = elements[0];
@@ -230,6 +232,31 @@ function renderChart() {
             }
         }
     });
+}
+
+/**
+ * Ensure the chart resizes cleanly when the viewport changes.
+ */
+function initializeChartResizeHandler() {
+    if (chartResizeHandler) {
+        window.removeEventListener("resize", chartResizeHandler);
+    }
+
+    chartResizeHandler = () => {
+        if (resizeTimeout) {
+            clearTimeout(resizeTimeout);
+        }
+
+        // Debounce resize events to avoid repeated expensive redraws while dragging.
+        resizeTimeout = setTimeout(() => {
+            if (currentChart) {
+                currentChart.resize();
+                currentChart.update("none");
+            }
+        }, 120);
+    };
+
+    window.addEventListener("resize", chartResizeHandler);
 }
 
 /**
@@ -415,6 +442,7 @@ export async function initInteractionTechniquesChart() {
 
         initializeFilters();
         initializeModalHandlers();
+        initializeChartResizeHandler();
         renderChart();
     } catch (error) {
         console.error("Error initializing chart:", error);
