@@ -11,6 +11,7 @@
     "vite": "^5.3.3"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "papaparse": "^5.5.3",
     "uniq": "^1.0.1",
     "xhr": "^2.6.0"

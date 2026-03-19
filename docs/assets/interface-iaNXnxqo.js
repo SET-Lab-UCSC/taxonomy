@@ -1,6 +1,7 @@
 import "./modulepreload-polyfill-DaKOjhqt.js";
 /* empty css                */
-import { l as loadObsAsJson, d as loadFaceAsJson } from "./csvtojson-CRSdwkOB.js";
+import { l as loadObsAsJson, d as loadFaceAsJson } from "./csvtojson-CRp_4eyR.js";
+import "./papaparse.min-DOsBUvb2.js";
 document.addEventListener("DOMContentLoaded", async () => {
   const obsSubmissions = await loadObsAsJson();
   const faceSumissions = await loadFaceAsJson();
@@ -38,4 +39,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 });
-//# sourceMappingURL=interface-Bq5G9O-U.js.map
+//# sourceMappingURL=interface-iaNXnxqo.js.map
