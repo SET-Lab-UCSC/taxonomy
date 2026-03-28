@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convergence &amp; Divergence — Taxonomy of XR Interactions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Archivo+Black&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="./styles/viz-charts.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-buttons">
+            <button class="btn btn-outline">Submit an observation</button>
+            <button class="btn btn-primary">About</button>
+        </div>
+    </header>
+
+    <!-- Sub-nav -->
+    <nav class="sub-nav">
+        <div class="sub-nav-links">
+            <a href="./index.html" class="sub-nav-link">Home ›</a>
+            <a href="./explore.html" class="sub-nav-link">Explore Observations ›</a>
+            <a href="./convergence.html" class="sub-nav-link">Convergence ›</a>
+            <a href="./app-tasks-network.html" class="sub-nav-link">App–Task Network ›</a>
+            <a href="./technique-frequency.html" class="sub-nav-link">Technique Frequency ›</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="back-button">
+            <a href="./index.html" class="back-link">← Back</a>
+        </div>
+
+        <div class="page-header">
+            <h2 class="page-title">Convergence &amp; Divergence</h2>
+            <p class="page-description">
+                Each bubble represents one interaction technique. The horizontal axis shows how many distinct
+                applications use that technique — techniques at the right are <strong>convergent</strong> (adopted
+                broadly across many apps), while those at the left are <strong>divergent</strong> (unique to a single
+                application). The vertical axis shows total observation count; bubble size encodes the same frequency.
+                Hover over a bubble to see details.
+            </p>
+        </div>
+
+        <!-- Chart -->
+        <div class="viz-card">
+            <div class="viz-card-title">Interaction Technique Convergence</div>
+            <div id="chartArea">
+                <div class="canvas-wrapper-tall">
+                    <canvas id="convergenceChart"></canvas>
+                </div>
+                <div class="axis-labels">
+                    <span>← Divergent (unique to one app)</span>
+                    <span>Convergent (shared across many apps) →</span>
+                </div>
+            </div>
+            <div id="chartLoading" class="chart-loading">Loading data…</div>
+
+            <!-- Legend -->
+            <div class="viz-legend" id="convergenceLegend" style="display:none;">
+                <div class="viz-legend-item">
+                    <div class="viz-legend-swatch" style="background: rgba(239,68,68,0.75);"></div>
+                    <span>Divergent — 1 application</span>
+                </div>
+                <div class="viz-legend-item">
+                    <div class="viz-legend-swatch" style="background: rgba(251,146,60,0.75);"></div>
+                    <span>Semi-convergent — 2–3 applications</span>
+                </div>
+                <div class="viz-legend-item">
+                    <div class="viz-legend-swatch" style="background: rgba(20,184,166,0.75);"></div>
+                    <span>Convergent — 4+ applications</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary table -->
+        <div class="viz-card">
+            <div class="viz-card-title">Technique Summary</div>
+            <div class="matrix-wrapper">
+                <table class="matrix-table" id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th class="row-header">Interaction Technique</th>
+                            <th>Total Observations</th>
+                            <th>Applications</th>
+                            <th>Convergence</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import Papa from "papaparse";
+        import Chart from "chart.js/auto";
+
+        async function loadObservations() {
+            const fileName = "Taxonomy Observations - Observations.csv";
+            const basePath = import.meta.env.BASE_URL || '/';
+            const paths = [`./${fileName}`, `${basePath}${fileName}`, `/${fileName}`];
+            for (const path of paths) {
+                try {
+                    const res = await fetch(path);
+                    if (res.ok) {
+                        const text = await res.text();
+                        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim() });
+                        return parsed.data;
+                    }
+                } catch (e) { continue; }
+            }
+            throw new Error("Could not load observations CSV");
+        }
+
+        function buildTechStats(observations) {
+            const freqMap = {};   // technique → total count
+            const appMap = {};    // technique → Set of apps
+
+            observations.forEach(obs => {
+                const techRaw = (obs.Interaction_Technique || "").trim();
+                if (!techRaw) return;
+
+                const app = (obs.Application || "").trim();
+                const techs = techRaw.split(',').map(t => t.trim()).filter(Boolean);
+
+                techs.forEach(t => {
+                    freqMap[t] = (freqMap[t] || 0) + 1;
+                    if (!appMap[t]) appMap[t] = new Set();
+                    if (app) appMap[t].add(app);
+                });
+            });
+
+            return Object.entries(freqMap).map(([tech, freq]) => ({
+                technique: tech,
+                frequency: freq,
+                appCount: appMap[tech] ? appMap[tech].size : 0,
+                apps: appMap[tech] ? Array.from(appMap[tech]).sort() : []
+            })).sort((a, b) => b.frequency - a.frequency);
+        }
+
+        function convergenceLabel(appCount) {
+            if (appCount >= 4) return "Convergent";
+            if (appCount >= 2) return "Semi-convergent";
+            return "Divergent";
+        }
+
+        function pointColor(appCount) {
+            if (appCount >= 4) return { bg: "rgba(20,184,166,0.75)", border: "rgba(13,148,136,1)" };
+            if (appCount >= 2) return { bg: "rgba(251,146,60,0.75)", border: "rgba(234,88,12,1)" };
+            return { bg: "rgba(239,68,68,0.75)", border: "rgba(220,38,38,1)" };
+        }
+
+        function scaledRadius(freq, maxFreq) {
+            // Scale radius between 6 and 28 pixels
+            return 6 + Math.round((freq / maxFreq) * 22);
+        }
+
+        function renderChart(stats) {
+            const loading = document.getElementById("chartLoading");
+            const chartArea = document.getElementById("chartArea");
+            const legend = document.getElementById("convergenceLegend");
+
+            loading.style.display = "none";
+            chartArea.style.display = "block";
+            legend.style.display = "flex";
+
+            const maxFreq = Math.max(...stats.map(s => s.frequency));
+
+            // Build 3 datasets by convergence category
+            const categories = [
+                { label: "Convergent (4+ apps)", minApps: 4, color: "rgba(20,184,166,0.75)", border: "rgba(13,148,136,1)" },
+                { label: "Semi-convergent (2–3 apps)", minApps: 2, maxApps: 3, color: "rgba(251,146,60,0.75)", border: "rgba(234,88,12,1)" },
+                { label: "Divergent (1 app)", minApps: 0, maxApps: 1, color: "rgba(239,68,68,0.75)", border: "rgba(220,38,38,1)" },
+            ];
+
+            const datasets = categories.map(cat => {
+                const points = stats
+                    .filter(s => {
+                        if (cat.maxApps !== undefined) return s.appCount >= cat.minApps && s.appCount <= cat.maxApps;
+                        return s.appCount >= cat.minApps;
+                    })
+                    .map(s => ({
+                        x: s.appCount,
+                        y: s.frequency,
+                        r: scaledRadius(s.frequency, maxFreq),
+                        technique: s.technique,
+                        apps: s.apps
+                    }));
+                return {
+                    label: cat.label,
+                    data: points,
+                    backgroundColor: cat.color,
+                    borderColor: cat.border,
+                    borderWidth: 1.5,
+                };
+            });
+
+            const ctx = document.getElementById("convergenceChart");
+            new Chart(ctx, {
+                type: "bubble",
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: "top",
+                            labels: { font: { family: "'Work Sans', sans-serif", size: 12 } }
+                        },
+                        tooltip: {
+                            backgroundColor: "rgba(0,0,0,0.85)",
+                            padding: 12,
+                            titleFont: { size: 13, weight: "bold", family: "'Work Sans', sans-serif" },
+                            bodyFont: { size: 12, family: "'Work Sans', sans-serif" },
+                            borderColor: "rgba(205,55,53,1)",
+                            borderWidth: 1,
+                            callbacks: {
+                                title: (items) => items[0].raw.technique,
+                                label: (ctx) => {
+                                    const d = ctx.raw;
+                                    const lines = [
+                                        `Observations: ${d.y}`,
+                                        `Apps (${d.x}): ${d.apps.join(", ") || "—"}`,
+                                    ];
+                                    return lines;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: "Number of Applications Using Technique", font: { family: "'Work Sans', sans-serif", size: 12 } },
+                            ticks: { stepSize: 1, font: { family: "'Work Sans', sans-serif" } },
+                            min: 0,
+                        },
+                        y: {
+                            title: { display: true, text: "Total Observations", font: { family: "'Work Sans', sans-serif", size: 12 } },
+                            ticks: { stepSize: 1, font: { family: "'Work Sans', sans-serif" } },
+                            beginAtZero: true,
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTable(stats) {
+            const tbody = document.getElementById("summaryBody");
+            stats.forEach(s => {
+                const tr = document.createElement("tr");
+                const badge = convergenceLabel(s.appCount);
+                const badgeColor = s.appCount >= 4 ? "#14b8a6" : s.appCount >= 2 ? "#f97316" : "#ef4444";
+                tr.innerHTML = `
+                    <td class="row-label">${s.technique}</td>
+                    <td>${s.frequency}</td>
+                    <td>${s.apps.join(", ") || "—"}</td>
+                    <td><span style="
+                        display:inline-block;
+                        padding:0.15rem 0.6rem;
+                        border-radius:9999px;
+                        background:${badgeColor};
+                        color:white;
+                        font-size:0.75rem;
+                        font-weight:600;
+                    ">${badge}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function init() {
+            try {
+                const observations = await loadObservations();
+                const stats = buildTechStats(observations);
+                renderChart(stats);
+                renderTable(stats);
+            } catch (err) {
+                document.getElementById("chartLoading").innerHTML =
+                    `<div class="chart-error">Error loading data: ${err.message}</div>`;
+            }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

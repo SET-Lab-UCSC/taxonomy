@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technique Frequency by Genre — Taxonomy of XR Interactions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Archivo+Black&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="./styles/viz-charts.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-buttons">
+            <button class="btn btn-outline">Submit an observation</button>
+            <button class="btn btn-primary">About</button>
+        </div>
+    </header>
+
+    <!-- Sub-nav -->
+    <nav class="sub-nav">
+        <div class="sub-nav-links">
+            <a href="./index.html" class="sub-nav-link">Home ›</a>
+            <a href="./explore.html" class="sub-nav-link">Explore Observations ›</a>
+            <a href="./convergence.html" class="sub-nav-link">Convergence ›</a>
+            <a href="./app-tasks-network.html" class="sub-nav-link">App–Task Network ›</a>
+            <a href="./technique-frequency.html" class="sub-nav-link">Technique Frequency ›</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="back-button">
+            <a href="./index.html" class="back-link">← Back</a>
+        </div>
+
+        <div class="page-header">
+            <h2 class="page-title">Technique Frequency by Genre</h2>
+            <p class="page-description">
+                A stacked bar chart showing how often each interaction technique appears, broken down by application
+                genre. Each bar represents one technique sorted by total observation count (left = most frequent).
+                Stack segments show which genres contribute to that technique's usage — revealing which techniques are
+                genre-specific versus cross-genre. Toggle between stacked and grouped views.
+            </p>
+        </div>
+
+        <!-- View toggle -->
+        <div class="toggle-group">
+            <button class="toggle-btn active" id="btnStacked">Stacked</button>
+            <button class="toggle-btn" id="btnGrouped">Grouped</button>
+        </div>
+
+        <!-- Chart card -->
+        <div class="viz-card">
+            <div class="viz-card-title">Interaction Techniques × Genre</div>
+            <div id="chartLoading" class="chart-loading">Loading data…</div>
+            <div id="chartContent" style="display:none;">
+                <div class="canvas-wrapper-tall">
+                    <canvas id="freqChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Genre breakdown table -->
+        <div class="viz-card">
+            <div class="viz-card-title">Genre Breakdown per Technique</div>
+            <div class="matrix-wrapper">
+                <table class="matrix-table" id="genreTable">
+                    <thead id="genreHead"></thead>
+                    <tbody id="genreBody"></tbody>
+                </table>
+            </div>
+            <div class="color-scale-bar">
+                <span>Fewer</span>
+                <div class="color-scale-gradient"></div>
+                <span>More</span>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import Papa from "papaparse";
+        import Chart from "chart.js/auto";
+
+        // Genre mapping
+        const GENRE_MAP = {
+            "Beat Saber":                           "Music / Rhythm",
+            "Fruit Ninja":                          "Action / Arcade",
+            "Archery Pro":                          "Sports",
+            "War of Wizards: Apprentice Edition":   "Fantasy / Action",
+            "Forever Pets":                         "Simulation",
+            "Half Life: Alyx":                      "FPS / Action",
+            "VTOL VR":                              "Flight Simulator",
+            "ShapesXR":                             "Productivity",
+            "Meta Quest 3: Home":                   "OS / Platform",
+            "Roblox":                               "Platform / Social",
+            "Spongebob":                            "Sample",
+        };
+
+        function getGenre(app) {
+            return GENRE_MAP[app] || "Other";
+        }
+
+        // Distinct colours per genre (consistent ordering)
+        const GENRE_COLORS = {
+            "Music / Rhythm":    "rgba(205,55,53,0.82)",
+            "Action / Arcade":   "rgba(251,146,60,0.82)",
+            "Sports":            "rgba(234,179,8,0.82)",
+            "Fantasy / Action":  "rgba(168,85,247,0.82)",
+            "Simulation":        "rgba(20,184,166,0.82)",
+            "FPS / Action":      "rgba(239,68,68,0.65)",
+            "Flight Simulator":  "rgba(59,130,246,0.82)",
+            "Productivity":      "rgba(34,197,94,0.82)",
+            "OS / Platform":     "rgba(99,102,241,0.82)",
+            "Platform / Social": "rgba(236,72,153,0.82)",
+            "Sample":            "rgba(156,163,175,0.6)",
+            "Other":             "rgba(107,114,128,0.6)",
+        };
+
+        async function loadObservations() {
+            const fileName = "Taxonomy Observations - Observations.csv";
+            const basePath = import.meta.env.BASE_URL || '/';
+            const paths = [`./${fileName}`, `${basePath}${fileName}`, `/${fileName}`];
+            for (const path of paths) {
+                try {
+                    const res = await fetch(path);
+                    if (res.ok) {
+                        const text = await res.text();
+                        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim() });
+                        return parsed.data;
+                    }
+                } catch (e) { continue; }
+            }
+            throw new Error("Could not load observations CSV");
+        }
+
+        /**
+         * Returns:
+         *   techGenre[tech][genre] = count
+         *   techTotal[tech] = total count
+         *   genres: sorted list of genres present in data
+         *   techniques: sorted by total count (descending)
+         */
+        function buildTechGenreMatrix(observations) {
+            const techGenre = {};
+            const techTotal = {};
+            const genreSet = new Set();
+
+            observations.forEach(obs => {
+                const app = (obs.Application || "").trim();
+                if (!app) return;
+                const genre = getGenre(app);
+
+                const techRaw = (obs.Interaction_Technique || "").trim();
+                if (!techRaw) return;
+                const techs = techRaw.split(',').map(t => t.trim()).filter(Boolean);
+
+                techs.forEach(tech => {
+                    if (!techGenre[tech]) techGenre[tech] = {};
+                    techGenre[tech][genre] = (techGenre[tech][genre] || 0) + 1;
+                    techTotal[tech] = (techTotal[tech] || 0) + 1;
+                    genreSet.add(genre);
+                });
+            });
+
+            // Sort techniques by total count descending
+            const techniques = Object.keys(techTotal).sort((a, b) => techTotal[b] - techTotal[a]);
+            const genres = Array.from(genreSet).sort();
+
+            return { techGenre, techTotal, techniques, genres };
+        }
+
+        let freqChart = null;
+
+        function renderChart(techGenre, techniques, genres, stacked) {
+            if (freqChart) { freqChart.destroy(); freqChart = null; }
+
+            const datasets = genres.map(genre => ({
+                label: genre,
+                data: techniques.map(t => techGenre[t]?.[genre] || 0),
+                backgroundColor: GENRE_COLORS[genre] || "rgba(107,114,128,0.7)",
+                borderWidth: stacked ? 0 : 1,
+                borderColor: stacked ? undefined : "rgba(255,255,255,0.5)",
+            }));
+
+            const ctx = document.getElementById("freqChart");
+            freqChart = new Chart(ctx, {
+                type: "bar",
+                data: { labels: techniques, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: "bottom",
+                            labels: { font: { family: "'Work Sans', sans-serif", size: 11 }, boxWidth: 14, padding: 16 }
+                        },
+                        tooltip: {
+                            backgroundColor: "rgba(0,0,0,0.85)",
+                            padding: 10,
+                            titleFont: { family: "'Work Sans', sans-serif", size: 13, weight: "bold" },
+                            bodyFont: { family: "'Work Sans', sans-serif", size: 12 },
+                            borderColor: "rgba(205,55,53,1)",
+                            borderWidth: 1,
+                            mode: "index",
+                            callbacks: {
+                                footer: (items) => {
+                                    const total = items.reduce((s, i) => s + (i.parsed.y || 0), 0);
+                                    return `Total: ${total}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked,
+                            ticks: {
+                                font: { family: "'Work Sans', sans-serif", size: 10 },
+                                maxRotation: 45,
+                                minRotation: 30,
+                            }
+                        },
+                        y: {
+                            stacked,
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: "Observation Count",
+                                font: { family: "'Work Sans', sans-serif", size: 12 }
+                            },
+                            ticks: { stepSize: 1, font: { family: "'Work Sans', sans-serif" } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function cellBg(count, maxCount) {
+            if (!count) return "#ffffff";
+            const alpha = 0.1 + (count / maxCount) * 0.8;
+            return `rgba(205,55,53,${alpha.toFixed(2)})`;
+        }
+        function cellFg(count, maxCount) {
+            return (count / maxCount) > 0.6 ? "#ffffff" : "#374151";
+        }
+
+        function renderGenreTable(techGenre, techTotal, techniques, genres) {
+            const maxCount = Math.max(...techniques.flatMap(t => genres.map(g => techGenre[t]?.[g] || 0)));
+
+            const head = document.getElementById("genreHead");
+            const body = document.getElementById("genreBody");
+
+            // Header
+            const headerRow = document.createElement("tr");
+            const corner = document.createElement("th");
+            corner.className = "row-header";
+            corner.textContent = "Technique";
+            headerRow.appendChild(corner);
+            genres.forEach(g => {
+                const th = document.createElement("th");
+                th.textContent = g;
+                headerRow.appendChild(th);
+            });
+            const totalTh = document.createElement("th");
+            totalTh.textContent = "Total";
+            totalTh.style.fontWeight = "700";
+            headerRow.appendChild(totalTh);
+            head.appendChild(headerRow);
+
+            // Rows
+            techniques.forEach(tech => {
+                const tr = document.createElement("tr");
+                const nameTd = document.createElement("td");
+                nameTd.className = "row-label";
+                nameTd.textContent = tech;
+                tr.appendChild(nameTd);
+
+                genres.forEach(g => {
+                    const count = techGenre[tech]?.[g] || 0;
+                    const td = document.createElement("td");
+                    td.style.backgroundColor = cellBg(count, maxCount);
+                    td.style.color = cellFg(count, maxCount);
+                    td.textContent = count > 0 ? count : "";
+                    td.title = `${tech} × ${g}: ${count}`;
+                    tr.appendChild(td);
+                });
+
+                const totalTd = document.createElement("td");
+                totalTd.textContent = techTotal[tech];
+                totalTd.style.fontWeight = "700";
+                totalTd.style.color = "#CD3735";
+                tr.appendChild(totalTd);
+
+                body.appendChild(tr);
+            });
+        }
+
+        // State
+        let matrixData = null;
+        let isStacked = true;
+
+        async function init() {
+            try {
+                const observations = await loadObservations();
+                matrixData = buildTechGenreMatrix(observations);
+
+                document.getElementById("chartLoading").style.display = "none";
+                document.getElementById("chartContent").style.display = "block";
+
+                renderChart(matrixData.techGenre, matrixData.techniques, matrixData.genres, true);
+                renderGenreTable(matrixData.techGenre, matrixData.techTotal, matrixData.techniques, matrixData.genres);
+            } catch (err) {
+                document.getElementById("chartLoading").innerHTML =
+                    `<div class="chart-error">Error loading data: ${err.message}</div>`;
+            }
+        }
+
+        document.getElementById("btnStacked").addEventListener("click", () => {
+            isStacked = true;
+            document.getElementById("btnStacked").classList.add("active");
+            document.getElementById("btnGrouped").classList.remove("active");
+            if (matrixData) renderChart(matrixData.techGenre, matrixData.techniques, matrixData.genres, true);
+        });
+
+        document.getElementById("btnGrouped").addEventListener("click", () => {
+            isStacked = false;
+            document.getElementById("btnGrouped").classList.add("active");
+            document.getElementById("btnStacked").classList.remove("active");
+            if (matrixData) renderChart(matrixData.techGenre, matrixData.techniques, matrixData.genres, false);
+        });
+
+        init();
+    </script>
+</body>
+
+</html>

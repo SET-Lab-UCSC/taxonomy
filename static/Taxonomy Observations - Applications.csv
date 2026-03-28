@@ -1,11 +1,29 @@
-Name,Year,Description,Thumbnail,Assignee
-Spongebob,1990s,"A sample application that we use. Spongebob, an American cultural enigma, continues to persist as a dominant meme in contemporary comedy.",https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/ad5a4080-2498-48de-8417-567e9428a300/public,
-Beat Saber,2018,A virtual rhythm game.,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/74dc5f02-d0d0-43bd-f248-cef1e18db500/public,
-Fruit Ninja,2019,A fruit cutting game.,https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/304d4916-15da-4fe4-7c82-f40d81f11800/public,
-Oculus First Steps,,,,Veronica (time permitting)
-Roblox,,,,Marisa
-Archery Pro,2024,An archery game,,Marisa
-War of Wizards,,,,Veronica
-Forever Pets,,,,Veronica
-Half Life: Alyx,2020,"Half-Life: Alyx is a 2020 virtual reality (VR) first-person shooter game developed and published by Valve. It was released for Windows on March 23, 2020, and for Linux on May 15, with support for most PC-compatible VR headsets. Players control Alyx Vance on a mission to seize a superweapon belonging to the alien Combine before the events of Half-Life 2 (2004). Like previous Half-Life games, Alyx incorporates combat, puzzles and exploration. Players use VR to interact with the environment and fight enemies, using ""gravity gloves"" to snatch objects from a distance, similarly to the gravity gun from Half-Life 2.",https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/b45e9d22-1613-4622-17b9-4d2ee035eb00/public,
-VTOL VR,2020,"VTOL VR is a near-future VR mil-fantasy flight game developed by Paolo Encarnación, also known as BahamutoD, of Boundless Dynamics, original creator of the BDArmory mod for Kerbal Space Program. It is centered around air combat, putting players in one of three aircraft in a military environment. Players can interact with each button and switch in their cockpit to control their aircraft; no keyboard or even HOTAS interaction is required. Players can take on a number of different enemies, including hostile aircraft, ground units, and even naval ships with a plethora of strong weaponry.",https://imagedelivery.net/VHJK16c5fHmNaL_z0o4Kaw/89195c7c-0031-4a0b-642f-579de5007e00/public,
+Name,Year,Genre,Supported_Platforms,Cost,Scale_Of_Use,Description
+Meta Quest 3: Home,2023,System,Meta Quest,Free,High,The built-in home environment and launcher for the Meta Quest 3 headset that provides system-level navigation and app management.
+Beat Saber,2019,Game,"Meta Quest, SteamVR, PlayStation VR",Paid,High,A popular rhythm game where players slash colored blocks to the beat of music using virtual lightsabers.
+VTOL VR,2017,Game,SteamVR,Paid,Medium,A near-future military flight simulator featuring realistic cockpit interaction and full VR controller support.
+Fruit Ninja,2021,Game,"Meta Quest, SteamVR",Paid,Medium,A VR adaptation of the classic mobile game where players slice fruit and navigate menus using virtual hands.
+Half Life: Alyx,2020,Game,SteamVR,Paid,High,A critically acclaimed VR first-person shooter set in the Half-Life universe featuring rich physical interaction mechanics.
+ShapesXR,2021,Productivity,"Meta Quest, SteamVR",Paid,Low,A collaborative VR design and prototyping tool that allows teams to build and iterate on 3D concepts in virtual space.
+Archery Pro,2020,Game,Meta Quest,Paid,Medium,A VR archery simulation game featuring realistic bow-and-arrow mechanics and menu navigation.
+Roblox,2023,Game,Meta Quest,Free,High,A massively popular user-generated gaming platform that includes a wide variety of VR-compatible games and experiences.
+War of Wizards: Apprentice Edition,2021,Game,Meta Quest,Free,Low,A VR fantasy combat game where players cast spells using gesture-based input and navigate magical menus.
+Forever Pets,2022,Game,Meta Quest,Paid,Low,A VR pet simulation game where players hatch and care for virtual animal companions using physical interactions.
+Detective VR Demo,2021,Game,SteamVR,Free,Low,A VR detective mystery demo in which players gather clues and interact with physical evidence in a crime scene environment.
+Artemis VR Demo,2022,Productivity,SteamVR,Free,Low,A VR simulation demo designed to showcase realistic control panel interactions such as switches and sliders.
+Tennis Esports,2020,Game,Meta Quest,Paid,Medium,A VR tennis game that simulates realistic serve and swing mechanics using motion-tracked controllers.
+Ironstrike,2023,Game,Meta Quest,Paid,Low,A VR action RPG featuring melee combat with swords and shields as well as ranged weapons and magic attacks.
+Oculus First Steps,2019,System,Meta Quest,Free,High,An introductory VR experience included with Meta Quest headsets to teach users fundamental VR interaction patterns.
+Bait!,2016,Game,"Meta Quest, SteamVR",Paid,Medium,A relaxing VR fishing game where players cast lines and reel in fish using physical rod and reel mechanics.
+Gorilla Tag,2021,Game,"Meta Quest, SteamVR",Free,High,A social VR game where players move by physically pushing off surfaces with their hands in a gorilla-like locomotion style.
+The Underpresents,2020,Experience,"Meta Quest, SteamVR",Free,Low,An immersive VR theatrical experience featuring rich storytelling and a variety of physical object interactions.
+Human Anatomy,2021,Education,Meta Quest,Paid,Medium,A VR educational application that lets users explore detailed 3D models of the human body at various scales.
+Derby Baseball,2022,Game,Meta Quest,Paid,Low,A VR baseball batting practice game where players hit pitches from a ball machine and practice swing mechanics.
+Youtube,2021,Productivity,"Meta Quest, Apple Vision Pro",Free,High,The official VR and spatial computing application for browsing and watching YouTube videos in an immersive environment.
+Spatial Piano,2022,Education,"Meta Quest, Apple Vision Pro",Paid,Low,A VR and spatial computing piano learning app where players practice playing keys and reading sheet music.
+Maestro (Demo),2022,Education,Meta Quest,Free,Low,A VR conducting simulation demo in which players lead a virtual orchestra using baton gestures and musical cues.
+VR Hockey Reborn,2021,Game,"Meta Quest, SteamVR",Paid,Low,A VR air hockey and ice hockey game where players grab sticks and hit pucks using physical movement.
+Guitar Strummer,2022,Education,Meta Quest,Paid,Low,A VR guitar learning application that allows players to strum chords and place chord shapes in a virtual scene.
+Baseball Pro,2021,Game,Meta Quest,Paid,Low,A VR baseball batting simulator where players swing a virtual bat and practice hitting pitched balls.
+Tilt Brush VR,2019,Productivity,"Meta Quest, SteamVR",Paid,Medium,A VR 3D painting application from Google that lets users draw and sculpt with a variety of virtual brushes in space.
+First Encounters,2023,Game,Meta Quest,Free,Medium,A Meta Quest VR game introducing players to sci-fi encounters featuring shooting mechanics and interactive alien environments.
