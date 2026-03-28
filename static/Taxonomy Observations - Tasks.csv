@@ -1,4 +1,8 @@
-Tasks,Thumbnail,Description
-Selection,,123
-Placement,,456
-Object Adjustment,,789
+Tasks,Description
+Selection,Choosing or activating a specific object or option in the environment or interface using a pointing or contact input.
+Navigation,Moving the user or viewpoint through virtual space including locomotion and perspective changes.
+Manipulation,Physically interacting with or transforming an object in the environment such as grabbing and moving objects.
+Control,Operating a continuous input device such as a joystick or lever to control a vehicle or system parameter.
+Aim,Directing a virtual projectile or tool toward a target through controller orientation or movement.
+Draw,Creating a freehand visual stroke or shape in virtual space using motion-tracked input.
+Swipe,Scrolling or sliding through a list or panel using a directional gesture or thumbstick input.
