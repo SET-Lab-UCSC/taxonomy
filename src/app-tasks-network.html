@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App–Task Network — Taxonomy of XR Interactions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Archivo+Black&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="stylesheet" href="./styles/viz-charts.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-buttons">
+            <button class="btn btn-outline">Submit an observation</button>
+            <button class="btn btn-primary">About</button>
+        </div>
+    </header>
+
+    <!-- Sub-nav -->
+    <nav class="sub-nav">
+        <div class="sub-nav-links">
+            <a href="./index.html" class="sub-nav-link">Home ›</a>
+            <a href="./explore.html" class="sub-nav-link">Explore Observations ›</a>
+            <a href="./convergence.html" class="sub-nav-link">Convergence ›</a>
+            <a href="./app-tasks-network.html" class="sub-nav-link">App–Task Network ›</a>
+            <a href="./technique-frequency.html" class="sub-nav-link">Technique Frequency ›</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="back-button">
+            <a href="./index.html" class="back-link">← Back</a>
+        </div>
+
+        <div class="page-header">
+            <h2 class="page-title">App–Task Network</h2>
+            <p class="page-description">
+                A matrix heatmap showing which tasks appear in each application or genre. Each cell is coloured by the
+                number of observations — darker red means more observations. Toggle between a per-application view and
+                an aggregated per-genre view. Hover over any cell for the exact count.
+            </p>
+        </div>
+
+        <!-- View toggle -->
+        <div class="toggle-group">
+            <button class="toggle-btn active" id="btnByApp">By Application</button>
+            <button class="toggle-btn" id="btnByGenre">By Genre</button>
+        </div>
+
+        <!-- Matrix card -->
+        <div class="viz-card">
+            <div class="viz-card-title" id="matrixTitle">Applications × Tasks</div>
+            <div id="matrixLoading" class="chart-loading">Loading data…</div>
+            <div id="matrixContent" style="display:none;">
+                <div class="matrix-wrapper">
+                    <table class="matrix-table" id="matrixTable">
+                        <thead id="matrixHead"></thead>
+                        <tbody id="matrixBody"></tbody>
+                    </table>
+                </div>
+                <div class="color-scale-bar">
+                    <span>Fewer observations</span>
+                    <div class="color-scale-gradient"></div>
+                    <span>More observations</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stacked bar chart — tasks per app/genre -->
+        <div class="viz-card">
+            <div class="viz-card-title" id="barTitle">Task Distribution per Application</div>
+            <div class="canvas-wrapper-tall">
+                <canvas id="taskBarChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import Papa from "papaparse";
+        import Chart from "chart.js/auto";
+
+        // Genre mapping — assigned manually since the Applications CSV has no genre column
+        const GENRE_MAP = {
+            "Beat Saber":                           "Music / Rhythm",
+            "Fruit Ninja":                          "Action / Arcade",
+            "Archery Pro":                          "Sports",
+            "War of Wizards: Apprentice Edition":   "Fantasy / Action",
+            "Forever Pets":                         "Simulation",
+            "Half Life: Alyx":                      "FPS / Action",
+            "VTOL VR":                              "Flight Simulator",
+            "ShapesXR":                             "Productivity",
+            "Meta Quest 3: Home":                   "OS / Platform",
+            "Roblox":                               "Platform / Social",
+            "Spongebob":                            "Sample",
+        };
+
+        function getGenre(app) {
+            return GENRE_MAP[app] || "Other";
+        }
+
+        // Palette for stacked bar datasets (one per task)
+        const TASK_COLORS = [
+            "rgba(205,55,53,0.8)",
+            "rgba(255,206,123,0.85)",
+            "rgba(20,184,166,0.8)",
+            "rgba(59,130,246,0.8)",
+            "rgba(168,85,247,0.8)",
+            "rgba(251,146,60,0.8)",
+            "rgba(236,72,153,0.8)",
+            "rgba(34,197,94,0.8)",
+            "rgba(239,68,68,0.6)",
+            "rgba(99,102,241,0.8)",
+            "rgba(245,158,11,0.8)",
+            "rgba(6,182,212,0.8)",
+        ];
+
+        async function loadObservations() {
+            const fileName = "Taxonomy Observations - Observations.csv";
+            const basePath = import.meta.env.BASE_URL || '/';
+            const paths = [`./${fileName}`, `${basePath}${fileName}`, `/${fileName}`];
+            for (const path of paths) {
+                try {
+                    const res = await fetch(path);
+                    if (res.ok) {
+                        const text = await res.text();
+                        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true, transformHeader: h => h.trim() });
+                        return parsed.data;
+                    }
+                } catch (e) { continue; }
+            }
+            throw new Error("Could not load observations CSV");
+        }
+
+        /**
+         * Build a matrix: rows[rowKey][colKey] = count
+         * Returns { matrix, rowKeys, colKeys }
+         */
+        function buildMatrix(observations, mode) {
+            const matrix = {};
+            const rowSet = new Set();
+            const colSet = new Set();
+
+            observations.forEach(obs => {
+                const app = (obs.Application || "").trim();
+                if (!app) return;
+
+                const taskRaw = (obs.Task || "").trim();
+                if (!taskRaw) return;
+                const tasks = taskRaw.split(',').map(t => t.trim()).filter(Boolean);
+
+                const rowKey = mode === "genre" ? getGenre(app) : app;
+
+                tasks.forEach(task => {
+                    rowSet.add(rowKey);
+                    colSet.add(task);
+                    if (!matrix[rowKey]) matrix[rowKey] = {};
+                    matrix[rowKey][task] = (matrix[rowKey][task] || 0) + 1;
+                });
+            });
+
+            // Sort rows and columns
+            const rowKeys = Array.from(rowSet).sort();
+            const colKeys = Array.from(colSet).sort();
+
+            return { matrix, rowKeys, colKeys };
+        }
+
+        function cellColor(count, maxCount) {
+            if (count === 0) return "#ffffff";
+            const alpha = 0.12 + (count / maxCount) * 0.78;
+            return `rgba(205, 55, 53, ${alpha.toFixed(2)})`;
+        }
+
+        function textColor(count, maxCount) {
+            return (count / maxCount) > 0.6 ? "#ffffff" : "#374151";
+        }
+
+        function renderMatrix(matrix, rowKeys, colKeys, titleEl) {
+            const maxCount = Math.max(...rowKeys.flatMap(r => colKeys.map(c => matrix[r]?.[c] || 0)));
+
+            const head = document.getElementById("matrixHead");
+            const body = document.getElementById("matrixBody");
+            head.innerHTML = "";
+            body.innerHTML = "";
+
+            // Header row
+            const headerRow = document.createElement("tr");
+            const corner = document.createElement("th");
+            corner.className = "row-header";
+            corner.textContent = titleEl;
+            headerRow.appendChild(corner);
+            colKeys.forEach(col => {
+                const th = document.createElement("th");
+                th.textContent = col;
+                headerRow.appendChild(th);
+            });
+            head.appendChild(headerRow);
+
+            // Data rows
+            rowKeys.forEach(row => {
+                const tr = document.createElement("tr");
+                const rowTh = document.createElement("td");
+                rowTh.className = "row-label";
+                rowTh.textContent = row;
+                tr.appendChild(rowTh);
+
+                colKeys.forEach(col => {
+                    const count = matrix[row]?.[col] || 0;
+                    const td = document.createElement("td");
+                    td.style.backgroundColor = cellColor(count, maxCount);
+                    td.style.color = textColor(count, maxCount);
+                    td.textContent = count > 0 ? count : "";
+                    td.title = `${row} × ${col}: ${count}`;
+                    tr.appendChild(td);
+                });
+                body.appendChild(tr);
+            });
+        }
+
+        let barChart = null;
+
+        function renderBarChart(matrix, rowKeys, colKeys, chartTitle) {
+            if (barChart) { barChart.destroy(); barChart = null; }
+
+            const datasets = colKeys.map((task, i) => ({
+                label: task,
+                data: rowKeys.map(row => matrix[row]?.[task] || 0),
+                backgroundColor: TASK_COLORS[i % TASK_COLORS.length],
+                borderWidth: 0,
+            }));
+
+            const ctx = document.getElementById("taskBarChart");
+            document.getElementById("barTitle").textContent = chartTitle;
+
+            barChart = new Chart(ctx, {
+                type: "bar",
+                data: { labels: rowKeys, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: "bottom",
+                            labels: { font: { family: "'Work Sans', sans-serif", size: 11 }, boxWidth: 14 }
+                        },
+                        tooltip: {
+                            backgroundColor: "rgba(0,0,0,0.85)",
+                            padding: 10,
+                            titleFont: { family: "'Work Sans', sans-serif", size: 13, weight: "bold" },
+                            bodyFont: { family: "'Work Sans', sans-serif", size: 12 },
+                            borderColor: "rgba(205,55,53,1)",
+                            borderWidth: 1,
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: { font: { family: "'Work Sans', sans-serif", size: 11 }, maxRotation: 35 }
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            title: { display: true, text: "Observation Count", font: { family: "'Work Sans', sans-serif" } },
+                            ticks: { stepSize: 1, font: { family: "'Work Sans', sans-serif" } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // State
+        let observations = null;
+
+        function showView(mode) {
+            const { matrix, rowKeys, colKeys } = buildMatrix(observations, mode);
+            const matrixTitle = mode === "genre" ? "Genre" : "Application";
+            const barTitle = mode === "genre"
+                ? "Task Distribution per Genre"
+                : "Task Distribution per Application";
+
+            renderMatrix(matrix, rowKeys, colKeys, matrixTitle);
+            renderBarChart(matrix, rowKeys, colKeys, barTitle);
+
+            document.getElementById("matrixTitle").textContent =
+                mode === "genre" ? "Genres × Tasks" : "Applications × Tasks";
+        }
+
+        async function init() {
+            try {
+                observations = await loadObservations();
+                document.getElementById("matrixLoading").style.display = "none";
+                document.getElementById("matrixContent").style.display = "block";
+                showView("app");
+            } catch (err) {
+                document.getElementById("matrixLoading").innerHTML =
+                    `<div class="chart-error">Error loading data: ${err.message}</div>`;
+            }
+        }
+
+        // Toggle buttons
+        document.getElementById("btnByApp").addEventListener("click", () => {
+            document.getElementById("btnByApp").classList.add("active");
+            document.getElementById("btnByGenre").classList.remove("active");
+            showView("app");
+        });
+
+        document.getElementById("btnByGenre").addEventListener("click", () => {
+            document.getElementById("btnByGenre").classList.add("active");
+            document.getElementById("btnByApp").classList.remove("active");
+            showView("genre");
+        });
+
+        init();
+    </script>
+</body>
+
+</html>
