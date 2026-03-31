@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObservationsView-DOibTT6m.js","assets/ObservationModal-CIOn42JA.js","assets/ApplicationsView-D8iQI649.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObservationsView-BGoi3reh.js","assets/ObservationModal-BirppGVs.js","assets/ApplicationsView-aOVXZmsv.js","assets/AnalysesView-K56pXOKC.js","assets/auto-ByddkvQv.js","assets/SankeyView-C5V6Zxwu.js","assets/transform-BznNK3nw.js","assets/_plugin-vue_export-helper-1tPrXgE0.js","assets/init-CTO7spbL.js","assets/SankeyView-BHfBOeJu.css","assets/ChordView-DEusWWbZ.js","assets/ChordView-B0WXxA2s.css","assets/RadarView-CdhnIr8Z.js","assets/RadarView-B6e7HQ15.css","assets/ComplexityBubbleView-BILMNIT5.js","assets/ComplexityBubbleView-BOUcx0Uw.css","assets/BipartiteNetworkView-J-eQ-VXn.js","assets/BipartiteNetworkView-CRThBO_u.css"])))=>i.map(i=>d[i]);
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -234,9 +234,6 @@ function looseEqual(a, b) {
     }
   }
   return String(a) === String(b);
-}
-function looseIndexOf(arr, val) {
-  return arr.findIndex((item) => looseEqual(item, val));
 }
 const isRef$1 = (val) => {
   return !!(val && val["__v_isRef"] === true);
@@ -6460,6 +6457,46 @@ function patchClass(el, value, isSVG) {
 }
 const vShowOriginalDisplay = /* @__PURE__ */ Symbol("_vod");
 const vShowHidden = /* @__PURE__ */ Symbol("_vsh");
+const vShow = {
+  // used for prop mismatch check during hydration
+  name: "show",
+  beforeMount(el, { value }, { transition }) {
+    el[vShowOriginalDisplay] = el.style.display === "none" ? "" : el.style.display;
+    if (transition && value) {
+      transition.beforeEnter(el);
+    } else {
+      setDisplay(el, value);
+    }
+  },
+  mounted(el, { value }, { transition }) {
+    if (transition && value) {
+      transition.enter(el);
+    }
+  },
+  updated(el, { value, oldValue }, { transition }) {
+    if (!value === !oldValue) return;
+    if (transition) {
+      if (value) {
+        transition.beforeEnter(el);
+        setDisplay(el, true);
+        transition.enter(el);
+      } else {
+        transition.leave(el, () => {
+          setDisplay(el, false);
+        });
+      }
+    } else {
+      setDisplay(el, value);
+    }
+  },
+  beforeUnmount(el, { value }) {
+    setDisplay(el, value);
+  }
+};
+function setDisplay(el, value) {
+  el.style.display = value ? el[vShowOriginalDisplay] : "none";
+  el[vShowHidden] = !value;
+}
 const CSS_VAR_TEXT = /* @__PURE__ */ Symbol("");
 const displayRE = /(?:^|;)\s*display\s*:/;
 function patchStyle(el, prev, next) {
@@ -6769,76 +6806,6 @@ function shouldSetAsPropForVueCE(el, key) {
   }
   const camelKey = camelize(key);
   return Array.isArray(props) ? props.some((prop) => camelize(prop) === camelKey) : Object.keys(props).some((prop) => camelize(prop) === camelKey);
-}
-const getModelAssigner = (vnode) => {
-  const fn = vnode.props["onUpdate:modelValue"] || false;
-  return isArray$1(fn) ? (value) => invokeArrayFns(fn, value) : fn;
-};
-const assignKey = /* @__PURE__ */ Symbol("_assign");
-const vModelSelect = {
-  // <select multiple> value need to be deep traversed
-  deep: true,
-  created(el, { value, modifiers: { number } }, vnode) {
-    const isSetModel = isSet(value);
-    addEventListener(el, "change", () => {
-      const selectedVal = Array.prototype.filter.call(el.options, (o) => o.selected).map(
-        (o) => number ? looseToNumber(getValue(o)) : getValue(o)
-      );
-      el[assignKey](
-        el.multiple ? isSetModel ? new Set(selectedVal) : selectedVal : selectedVal[0]
-      );
-      el._assigning = true;
-      nextTick(() => {
-        el._assigning = false;
-      });
-    });
-    el[assignKey] = getModelAssigner(vnode);
-  },
-  // set value in mounted & updated because <select> relies on its children
-  // <option>s.
-  mounted(el, { value }) {
-    setSelected(el, value);
-  },
-  beforeUpdate(el, _binding, vnode) {
-    el[assignKey] = getModelAssigner(vnode);
-  },
-  updated(el, { value }) {
-    if (!el._assigning) {
-      setSelected(el, value);
-    }
-  }
-};
-function setSelected(el, value) {
-  const isMultiple = el.multiple;
-  const isArrayValue = isArray$1(value);
-  if (isMultiple && !isArrayValue && !isSet(value)) {
-    return;
-  }
-  for (let i = 0, l = el.options.length; i < l; i++) {
-    const option = el.options[i];
-    const optionValue = getValue(option);
-    if (isMultiple) {
-      if (isArrayValue) {
-        const optionType = typeof optionValue;
-        if (optionType === "string" || optionType === "number") {
-          option.selected = value.some((v) => String(v) === String(optionValue));
-        } else {
-          option.selected = looseIndexOf(value, optionValue) > -1;
-        }
-      } else {
-        option.selected = value.has(optionValue);
-      }
-    } else if (looseEqual(getValue(option), value)) {
-      if (el.selectedIndex !== i) el.selectedIndex = i;
-      return;
-    }
-  }
-  if (!isMultiple && el.selectedIndex !== -1) {
-    el.selectedIndex = -1;
-  }
-}
-function getValue(el) {
-  return "_value" in el ? el._value : el.value;
 }
 const systemModifiers = ["ctrl", "shift", "alt", "meta"];
 const modifierGuards = {
@@ -9310,7 +9277,6 @@ async function fetchCsv(fileName) {
   throw new Error(`Could not load ${fileName}`);
 }
 const useDataStore = /* @__PURE__ */ defineStore("data", () => {
-  const techniques = /* @__PURE__ */ ref([]);
   const observations = /* @__PURE__ */ ref([]);
   const loading = /* @__PURE__ */ ref(false);
   const error = /* @__PURE__ */ ref(null);
@@ -9320,12 +9286,7 @@ const useDataStore = /* @__PURE__ */ defineStore("data", () => {
     loading.value = true;
     error.value = null;
     try {
-      const [techs, obs] = await Promise.all([
-        fetchCsv("Taxonomy Observations - Interaction Techniques.csv"),
-        fetchCsv("Taxonomy Observations - Observations.csv")
-      ]);
-      techniques.value = techs;
-      observations.value = obs;
+      observations.value = await fetchCsv("Taxonomy Observations - Observations.csv");
       loaded = true;
     } catch (err) {
       error.value = err.message;
@@ -9333,6 +9294,13 @@ const useDataStore = /* @__PURE__ */ defineStore("data", () => {
       loading.value = false;
     }
   }
+  const techniques = computed(() => {
+    const allTechniques = /* @__PURE__ */ new Set();
+    observations.value.forEach((o) => {
+      (o.Interaction_Technique || "").split(",").map((t) => t.trim()).filter(Boolean).forEach((t) => allTechniques.add(t));
+    });
+    return Array.from(allTechniques).sort().map((name) => ({ Interaction_Technique: name }));
+  });
   const applications = computed(() => {
     const names = observations.value.map((o) => (o.Application || "").trim()).filter(Boolean);
     return [...new Set(names)].sort();
@@ -9367,7 +9335,7 @@ const _hoisted_2$4 = {
   key: 1,
   class: "technique-card-placeholder gradient-placeholder"
 };
-const _hoisted_3$3 = { class: "technique-card-name" };
+const _hoisted_3$4 = { class: "technique-card-name" };
 const _sfc_main$6 = {
   __name: "TechniqueCard",
   props: {
@@ -9376,62 +9344,86 @@ const _sfc_main$6 = {
   },
   emits: ["click"],
   setup(__props, { emit: __emit }) {
-    var _a;
     const props = __props;
     const emit2 = __emit;
-    const imageSrc = props.technique.Thumbnail || ((_a = props.exemplar) == null ? void 0 : _a.URL) || null;
+    const imageSrc = computed(() => {
+      var _a;
+      return props.technique.Thumbnail || ((_a = props.exemplar) == null ? void 0 : _a.URL) || null;
+    });
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("div", {
         class: "technique-card",
         onClick: _cache[0] || (_cache[0] = ($event) => emit2("click", __props.technique))
       }, [
-        unref(imageSrc) ? (openBlock(), createElementBlock("img", {
+        imageSrc.value ? (openBlock(), createElementBlock("img", {
           key: 0,
-          src: unref(imageSrc),
+          src: imageSrc.value,
           class: "technique-card-thumb",
           alt: __props.technique.Interaction_Technique
         }, null, 8, _hoisted_1$5)) : (openBlock(), createElementBlock("div", _hoisted_2$4)),
-        createBaseVNode("div", _hoisted_3$3, toDisplayString(__props.technique.Interaction_Technique), 1)
+        createBaseVNode("div", _hoisted_3$4, toDisplayString(__props.technique.Interaction_Technique), 1)
       ]);
     };
   }
 };
 const _hoisted_1$4 = ["src", "alt"];
 const _hoisted_2$3 = {
-  key: 1,
+  key: 2,
   class: "obs-card-image-placeholder gradient-placeholder"
 };
-const _hoisted_3$2 = { class: "obs-card-info" };
-const _hoisted_4$2 = { class: "obs-card-title" };
-const _hoisted_5 = { class: "obs-card-app" };
+const _hoisted_3$3 = { class: "obs-card-info" };
+const _hoisted_4$1 = { class: "obs-card-title" };
+const _hoisted_5$1 = { class: "obs-card-app" };
 const _sfc_main$5 = {
   __name: "ObservationCard",
   props: {
     observation: { type: Object, required: true },
-    clickable: { type: Boolean, default: true }
+    clickable: { type: Boolean, default: true },
+    pauseGif: { type: Boolean, default: false }
   },
   emits: ["click"],
   setup(__props, { emit: __emit }) {
     const props = __props;
     const emit2 = __emit;
+    const canvasRef = /* @__PURE__ */ ref(null);
     function handleClick() {
       if (props.clickable) emit2("click", props.observation);
     }
+    function drawToCanvas() {
+      if (!props.pauseGif || !props.observation.URL || !canvasRef.value) return;
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        const canvas = canvasRef.value;
+        if (!canvas) return;
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        canvas.getContext("2d").drawImage(img, 0, 0);
+      };
+      img.src = props.observation.URL;
+    }
+    onMounted(drawToCanvas);
+    watch(() => props.observation.URL, drawToCanvas);
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("div", {
         class: normalizeClass(["obs-card", { small: !__props.clickable }]),
         style: normalizeStyle({ cursor: __props.clickable ? "pointer" : "default" }),
         onClick: handleClick
       }, [
-        __props.observation.URL ? (openBlock(), createElementBlock("img", {
+        __props.pauseGif && __props.observation.URL ? (openBlock(), createElementBlock("canvas", {
           key: 0,
+          ref_key: "canvasRef",
+          ref: canvasRef,
+          class: "obs-card-image"
+        }, null, 512)) : __props.observation.URL ? (openBlock(), createElementBlock("img", {
+          key: 1,
           src: __props.observation.URL,
           class: "obs-card-image",
           alt: __props.observation.Title
         }, null, 8, _hoisted_1$4)) : (openBlock(), createElementBlock("div", _hoisted_2$3)),
-        createBaseVNode("div", _hoisted_3$2, [
-          createBaseVNode("div", _hoisted_4$2, toDisplayString(__props.observation.Title), 1),
-          createBaseVNode("div", _hoisted_5, toDisplayString(__props.observation.Application), 1)
+        createBaseVNode("div", _hoisted_3$3, [
+          createBaseVNode("div", _hoisted_4$1, toDisplayString(__props.observation.Title), 1),
+          createBaseVNode("div", _hoisted_5$1, toDisplayString(__props.observation.Application), 1)
         ])
       ], 6);
     };
@@ -9443,14 +9435,10 @@ const _hoisted_1$3 = {
 };
 const _hoisted_2$2 = {
   key: 0,
-  style: { "color": "#4a4a4a", "margin": "0.75rem 0 1rem" }
-};
-const _hoisted_3$1 = {
-  key: 1,
   class: "technique-modal-obs"
 };
-const _hoisted_4$1 = {
-  key: 2,
+const _hoisted_3$2 = {
+  key: 1,
   style: { "color": "#9ca3af", "font-size": "0.875rem" }
 };
 const _sfc_main$4 = {
@@ -9476,8 +9464,7 @@ const _sfc_main$4 = {
               onClick: _cache[0] || (_cache[0] = ($event) => emit2("close"))
             }, "×"),
             createBaseVNode("h2", null, toDisplayString(__props.technique.Interaction_Technique), 1),
-            __props.technique.Description ? (openBlock(), createElementBlock("p", _hoisted_2$2, toDisplayString(__props.technique.Description), 1)) : createCommentVNode("", true),
-            __props.observations.length ? (openBlock(), createElementBlock("div", _hoisted_3$1, [
+            __props.observations.length ? (openBlock(), createElementBlock("div", _hoisted_2$2, [
               (openBlock(true), createElementBlock(Fragment, null, renderList(__props.observations, (obs) => {
                 return openBlock(), createBlock(_sfc_main$5, {
                   key: obs.Title + obs.Application,
@@ -9485,7 +9472,7 @@ const _sfc_main$4 = {
                   clickable: false
                 }, null, 8, ["observation"]);
               }), 128))
-            ])) : (openBlock(), createElementBlock("p", _hoisted_4$1, "No observations for this technique."))
+            ])) : (openBlock(), createElementBlock("p", _hoisted_3$2, "No observations for this technique."))
           ])
         ])) : createCommentVNode("", true)
       ]);
@@ -9497,18 +9484,81 @@ const _hoisted_2$1 = {
   key: 0,
   class: "loading-state"
 };
-const _hoisted_3 = {
+const _hoisted_3$1 = {
   key: 1,
   class: "chart-error"
 };
-const _hoisted_4 = { class: "technique-gallery" };
+const _hoisted_4 = { class: "home-layout" };
+const _hoisted_5 = { class: "technique-gallery-wrapper" };
+const _hoisted_6 = { class: "technique-gallery" };
+const _hoisted_7 = { class: "filter-panel" };
+const _hoisted_8 = { class: "filter-panel-header" };
+const _hoisted_9 = { class: "activity-filter-section" };
+const _hoisted_10 = { class: "activity-filter-bar" };
+const _hoisted_11 = ["onClick"];
+const _hoisted_12 = { class: "activity-filter-section" };
+const _hoisted_13 = { class: "activity-filter-bar" };
+const _hoisted_14 = ["onClick"];
+const _hoisted_15 = { class: "activity-filter-section" };
+const _hoisted_16 = { class: "activity-filter-bar" };
+const _hoisted_17 = ["onClick"];
+const _hoisted_18 = { class: "activity-filter-section" };
+const _hoisted_19 = { class: "activity-filter-bar" };
+const _hoisted_20 = ["onClick"];
+const _hoisted_21 = { class: "activity-filter-section" };
+const _hoisted_22 = { class: "activity-filter-bar" };
+const _hoisted_23 = ["onClick"];
 const _sfc_main$3 = {
   __name: "HomeView",
   setup(__props) {
     const store = useDataStore();
     const selectedTechnique = /* @__PURE__ */ ref(null);
     const selectedObservations = /* @__PURE__ */ ref([]);
+    const activeFilters = /* @__PURE__ */ ref({
+      Activity: /* @__PURE__ */ new Set(),
+      Task: /* @__PURE__ */ new Set(),
+      Action: /* @__PURE__ */ new Set(),
+      Handedness: /* @__PURE__ */ new Set(),
+      Multi_Action: /* @__PURE__ */ new Set()
+    });
     onMounted(() => store.load());
+    function uniqueValues(field) {
+      const vals = /* @__PURE__ */ new Set();
+      store.observations.forEach((o) => {
+        (o[field] || "").split(",").map((v) => v.trim()).filter(Boolean).forEach((v) => vals.add(v));
+      });
+      return [...vals].sort();
+    }
+    const allActivities = computed(() => uniqueValues("Activity"));
+    const allTasks = computed(() => uniqueValues("Task"));
+    const allActions = computed(() => uniqueValues("Action"));
+    const allHandedness = computed(() => uniqueValues("Handedness"));
+    const allMultiAction = computed(() => uniqueValues("Multi_Action"));
+    const anyActive = computed(() => Object.values(activeFilters.value).some((s) => s.size > 0));
+    const filteredTechniques = computed(() => {
+      if (!anyActive.value) return store.techniques;
+      return store.techniques.filter((tech) => {
+        const obs = store.observationsByTechnique(tech.Interaction_Technique);
+        return obs.some((o) => {
+          return Object.entries(activeFilters.value).every(([field, selected]) => {
+            if (selected.size === 0) return true;
+            const vals = (o[field] || "").split(",").map((v) => v.trim());
+            return vals.some((v) => selected.has(v));
+          });
+        });
+      });
+    });
+    function toggle(field, value) {
+      const next = new Set(activeFilters.value[field]);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      activeFilters.value[field] = next;
+    }
+    function clearAll() {
+      Object.keys(activeFilters.value).forEach((k) => {
+        activeFilters.value[k] = /* @__PURE__ */ new Set();
+      });
+    }
     function openTechnique(technique) {
       selectedTechnique.value = technique;
       selectedObservations.value = store.observationsByTechnique(technique.Interaction_Technique);
@@ -9519,20 +9569,94 @@ const _sfc_main$3 = {
     }
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("main", _hoisted_1$2, [
-        unref(store).loading ? (openBlock(), createElementBlock("div", _hoisted_2$1, "Loading…")) : unref(store).error ? (openBlock(), createElementBlock("div", _hoisted_3, "Error: " + toDisplayString(unref(store).error), 1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
-          _cache[0] || (_cache[0] = createBaseVNode("div", { class: "page-header" }, [
+        unref(store).loading ? (openBlock(), createElementBlock("div", _hoisted_2$1, "Loading…")) : unref(store).error ? (openBlock(), createElementBlock("div", _hoisted_3$1, "Error: " + toDisplayString(unref(store).error), 1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
+          _cache[6] || (_cache[6] = createBaseVNode("div", { class: "page-header" }, [
             createBaseVNode("h2", { class: "page-title" }, "Interaction Techniques"),
             createBaseVNode("p", { class: "page-description" }, " Browse the catalogue of spatial interaction techniques documented in the Spatial Interaction Vault. Click a card to explore observations. ")
           ], -1)),
           createBaseVNode("div", _hoisted_4, [
-            (openBlock(true), createElementBlock(Fragment, null, renderList(unref(store).techniques, (tech) => {
-              return openBlock(), createBlock(_sfc_main$6, {
-                key: tech.Interaction_Technique,
-                technique: tech,
-                exemplar: unref(store).exemplarForTechnique(tech.Interaction_Technique),
-                onClick: openTechnique
-              }, null, 8, ["technique", "exemplar"]);
-            }), 128))
+            createBaseVNode("div", _hoisted_5, [
+              createBaseVNode("div", _hoisted_6, [
+                (openBlock(true), createElementBlock(Fragment, null, renderList(filteredTechniques.value, (tech) => {
+                  return openBlock(), createBlock(_sfc_main$6, {
+                    key: tech.Interaction_Technique,
+                    technique: tech,
+                    exemplar: unref(store).exemplarForTechnique(tech.Interaction_Technique),
+                    onClick: openTechnique
+                  }, null, 8, ["technique", "exemplar"]);
+                }), 128))
+              ])
+            ]),
+            createBaseVNode("aside", _hoisted_7, [
+              createBaseVNode("div", _hoisted_8, [
+                _cache[0] || (_cache[0] = createBaseVNode("span", { class: "filter-panel-title" }, "Filter Techniques", -1)),
+                anyActive.value ? (openBlock(), createElementBlock("button", {
+                  key: 0,
+                  class: "activity-chip-clear",
+                  onClick: clearAll
+                }, "✕ Clear all")) : createCommentVNode("", true)
+              ]),
+              createBaseVNode("div", _hoisted_9, [
+                _cache[1] || (_cache[1] = createBaseVNode("div", { class: "activity-filter-label" }, "Activity", -1)),
+                createBaseVNode("div", _hoisted_10, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(allActivities.value, (v) => {
+                    return openBlock(), createElementBlock("button", {
+                      key: v,
+                      class: normalizeClass(["activity-chip", { active: activeFilters.value.Activity.has(v) }]),
+                      onClick: ($event) => toggle("Activity", v)
+                    }, toDisplayString(v), 11, _hoisted_11);
+                  }), 128))
+                ])
+              ]),
+              createBaseVNode("div", _hoisted_12, [
+                _cache[2] || (_cache[2] = createBaseVNode("div", { class: "activity-filter-label" }, "Task", -1)),
+                createBaseVNode("div", _hoisted_13, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(allTasks.value, (v) => {
+                    return openBlock(), createElementBlock("button", {
+                      key: v,
+                      class: normalizeClass(["activity-chip", { active: activeFilters.value.Task.has(v) }]),
+                      onClick: ($event) => toggle("Task", v)
+                    }, toDisplayString(v), 11, _hoisted_14);
+                  }), 128))
+                ])
+              ]),
+              createBaseVNode("div", _hoisted_15, [
+                _cache[3] || (_cache[3] = createBaseVNode("div", { class: "activity-filter-label" }, "Action", -1)),
+                createBaseVNode("div", _hoisted_16, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(allActions.value, (v) => {
+                    return openBlock(), createElementBlock("button", {
+                      key: v,
+                      class: normalizeClass(["activity-chip", { active: activeFilters.value.Action.has(v) }]),
+                      onClick: ($event) => toggle("Action", v)
+                    }, toDisplayString(v), 11, _hoisted_17);
+                  }), 128))
+                ])
+              ]),
+              createBaseVNode("div", _hoisted_18, [
+                _cache[4] || (_cache[4] = createBaseVNode("div", { class: "activity-filter-label" }, "Handedness", -1)),
+                createBaseVNode("div", _hoisted_19, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(allHandedness.value, (v) => {
+                    return openBlock(), createElementBlock("button", {
+                      key: v,
+                      class: normalizeClass(["activity-chip", { active: activeFilters.value.Handedness.has(v) }]),
+                      onClick: ($event) => toggle("Handedness", v)
+                    }, toDisplayString(v), 11, _hoisted_20);
+                  }), 128))
+                ])
+              ]),
+              createBaseVNode("div", _hoisted_21, [
+                _cache[5] || (_cache[5] = createBaseVNode("div", { class: "activity-filter-label" }, "Multi-action", -1)),
+                createBaseVNode("div", _hoisted_22, [
+                  (openBlock(true), createElementBlock(Fragment, null, renderList(allMultiAction.value, (v) => {
+                    return openBlock(), createElementBlock("button", {
+                      key: v,
+                      class: normalizeClass(["activity-chip", { active: activeFilters.value.Multi_Action.has(v) }]),
+                      onClick: ($event) => toggle("Multi_Action", v)
+                    }, toDisplayString(v), 11, _hoisted_23);
+                  }), 128))
+                ])
+              ])
+            ])
           ])
         ], 64)),
         createVNode(_sfc_main$4, {
@@ -9547,9 +9671,16 @@ const _sfc_main$3 = {
 };
 const routes = [
   { path: "/", component: _sfc_main$3 },
-  { path: "/observations", component: () => __vitePreload(() => import("./ObservationsView-DOibTT6m.js"), true ? __vite__mapDeps([0,1]) : void 0) },
-  { path: "/applications", component: () => __vitePreload(() => import("./ApplicationsView-D8iQI649.js"), true ? __vite__mapDeps([2,1]) : void 0) },
-  { path: "/analyses", component: () => __vitePreload(() => import("./AnalysesView-BnHrResa.js"), true ? [] : void 0) }
+  { path: "/observations", component: () => __vitePreload(() => import("./ObservationsView-BGoi3reh.js"), true ? __vite__mapDeps([0,1]) : void 0) },
+  { path: "/applications", component: () => __vitePreload(() => import("./ApplicationsView-aOVXZmsv.js"), true ? __vite__mapDeps([2,1]) : void 0) },
+  { path: "/analyses", component: () => __vitePreload(() => import("./AnalysesView-K56pXOKC.js"), true ? __vite__mapDeps([3,4]) : void 0) },
+  { path: "/viz/sankey", component: () => __vitePreload(() => import("./SankeyView-C5V6Zxwu.js"), true ? __vite__mapDeps([5,6,7,8,9]) : void 0) },
+  { path: "/viz/embodiment", component: () => __vitePreload(() => import("./EmbodimentView-YiuOuoMD.js"), true ? [] : void 0) },
+  { path: "/viz/chord", component: () => __vitePreload(() => import("./ChordView-DEusWWbZ.js"), true ? __vite__mapDeps([10,6,7,8,11]) : void 0) },
+  { path: "/viz/radar", component: () => __vitePreload(() => import("./RadarView-CdhnIr8Z.js"), true ? __vite__mapDeps([12,7,13]) : void 0) },
+  { path: "/viz/feedback", component: () => __vitePreload(() => import("./FeedbackMatrixView-_N49IJMr.js"), true ? [] : void 0) },
+  { path: "/viz/complexity", component: () => __vitePreload(() => import("./ComplexityBubbleView-BILMNIT5.js"), true ? __vite__mapDeps([14,4,7,15]) : void 0) },
+  { path: "/viz/network", component: () => __vitePreload(() => import("./BipartiteNetworkView-J-eQ-VXn.js"), true ? __vite__mapDeps([16,6,7,17]) : void 0) }
 ];
 const router = createRouter({
   history: createWebHistory("https://set-lab-ucsc.github.io/taxonomy/"),
@@ -9578,60 +9709,92 @@ const _sfc_main$2 = {
     };
   }
 };
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const _sfc_main$1 = {};
 const _hoisted_1 = { class: "sub-nav" };
 const _hoisted_2 = { class: "sub-nav-links" };
-function _sfc_render(_ctx, _cache) {
-  const _component_RouterLink = resolveComponent("RouterLink");
-  return openBlock(), createElementBlock("nav", _hoisted_1, [
-    createBaseVNode("div", _hoisted_2, [
-      createVNode(_component_RouterLink, {
-        to: "/",
-        class: "sub-nav-link"
-      }, {
-        default: withCtx(() => [..._cache[0] || (_cache[0] = [
-          createTextVNode("Interaction Techniques ›", -1)
-        ])]),
-        _: 1
-      }),
-      createVNode(_component_RouterLink, {
-        to: "/observations",
-        class: "sub-nav-link"
-      }, {
-        default: withCtx(() => [..._cache[1] || (_cache[1] = [
-          createTextVNode("Observations ›", -1)
-        ])]),
-        _: 1
-      }),
-      createVNode(_component_RouterLink, {
-        to: "/applications",
-        class: "sub-nav-link"
-      }, {
-        default: withCtx(() => [..._cache[2] || (_cache[2] = [
-          createTextVNode("Applications ›", -1)
-        ])]),
-        _: 1
-      }),
-      createVNode(_component_RouterLink, {
-        to: "/analyses",
-        class: "sub-nav-link"
-      }, {
-        default: withCtx(() => [..._cache[3] || (_cache[3] = [
-          createTextVNode("Analyses ›", -1)
-        ])]),
-        _: 1
-      })
-    ])
-  ]);
-}
-const SubNav = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render]]);
+const _hoisted_3 = {
+  key: 0,
+  class: "sub-nav-dropdown-menu"
+};
+const _sfc_main$1 = {
+  __name: "SubNav",
+  setup(__props) {
+    const vizOpen = /* @__PURE__ */ ref(false);
+    const vizLinks = [
+      { to: "/viz/sankey", label: "Taxonomy Flow (Sankey)" },
+      { to: "/viz/embodiment", label: "Embodiment Spectrum" },
+      { to: "/viz/chord", label: "Action–Technique Chord" },
+      { to: "/viz/radar", label: "Application Profiles (Radar)" },
+      { to: "/viz/feedback", label: "Feedback Matrix" },
+      { to: "/viz/complexity", label: "Convergence vs. Complexity" },
+      { to: "/viz/network", label: "Technique Adoption Network" }
+    ];
+    return (_ctx, _cache) => {
+      const _component_RouterLink = resolveComponent("RouterLink");
+      return openBlock(), createElementBlock("nav", _hoisted_1, [
+        createBaseVNode("div", _hoisted_2, [
+          createVNode(_component_RouterLink, {
+            to: "/",
+            class: "sub-nav-link"
+          }, {
+            default: withCtx(() => [..._cache[3] || (_cache[3] = [
+              createTextVNode("Interaction Techniques ›", -1)
+            ])]),
+            _: 1
+          }),
+          createVNode(_component_RouterLink, {
+            to: "/observations",
+            class: "sub-nav-link"
+          }, {
+            default: withCtx(() => [..._cache[4] || (_cache[4] = [
+              createTextVNode("Observations ›", -1)
+            ])]),
+            _: 1
+          }),
+          createVNode(_component_RouterLink, {
+            to: "/applications",
+            class: "sub-nav-link"
+          }, {
+            default: withCtx(() => [..._cache[5] || (_cache[5] = [
+              createTextVNode("Applications ›", -1)
+            ])]),
+            _: 1
+          }),
+          createVNode(_component_RouterLink, {
+            to: "/analyses",
+            class: "sub-nav-link"
+          }, {
+            default: withCtx(() => [..._cache[6] || (_cache[6] = [
+              createTextVNode("Analyses ›", -1)
+            ])]),
+            _: 1
+          }),
+          createBaseVNode("div", {
+            class: "sub-nav-dropdown",
+            onMouseenter: _cache[1] || (_cache[1] = ($event) => vizOpen.value = true),
+            onMouseleave: _cache[2] || (_cache[2] = ($event) => vizOpen.value = false)
+          }, [
+            _cache[7] || (_cache[7] = createBaseVNode("span", { class: "sub-nav-link sub-nav-dropdown-trigger" }, "Visualizations ›", -1)),
+            vizOpen.value ? (openBlock(), createElementBlock("div", _hoisted_3, [
+              (openBlock(), createElementBlock(Fragment, null, renderList(vizLinks, (link) => {
+                return createVNode(_component_RouterLink, {
+                  key: link.to,
+                  to: link.to,
+                  class: "sub-nav-dropdown-item",
+                  onClick: _cache[0] || (_cache[0] = ($event) => vizOpen.value = false)
+                }, {
+                  default: withCtx(() => [
+                    createTextVNode(toDisplayString(link.label), 1)
+                  ]),
+                  _: 2
+                }, 1032, ["to"]);
+              }), 64))
+            ])) : createCommentVNode("", true)
+          ], 32)
+        ])
+      ]);
+    };
+  }
+};
 const _sfc_main = {
   __name: "App",
   setup(__props) {
@@ -9641,7 +9804,7 @@ const _sfc_main = {
       const _component_RouterView = resolveComponent("RouterView");
       return openBlock(), createElementBlock(Fragment, null, [
         createVNode(_sfc_main$2),
-        createVNode(SubNav),
+        createVNode(_sfc_main$1),
         createVNode(_component_RouterView)
       ], 64);
     };
@@ -9660,21 +9823,24 @@ export {
   createElementBlock as c,
   createBaseVNode as d,
   createCommentVNode as e,
-  createTextVNode as f,
-  renderList as g,
-  computed as h,
-  openBlock as i,
-  createBlock as j,
-  watch as k,
-  withModifiers as l,
-  createStaticVNode as m,
+  computed as f,
+  ref as g,
+  openBlock as h,
+  createBlock as i,
+  withModifiers as j,
+  createStaticVNode as k,
+  normalizeStyle as l,
+  onBeforeUnmount as m,
   normalizeClass as n,
   onMounted as o,
-  normalizeStyle as p,
-  ref as r,
+  createTextVNode as p,
+  onUnmounted as q,
+  renderList as r,
+  withDirectives as s,
   toDisplayString as t,
   useDataStore as u,
-  vModelSelect as v,
-  withDirectives as w
+  vShow as v,
+  watch as w,
+  reactive as x
 };
-//# sourceMappingURL=index-5b4tOJXx.js.map
+//# sourceMappingURL=index-oTcuwcvi.js.map

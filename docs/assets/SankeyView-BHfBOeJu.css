@@ -1,0 +1,65 @@
+
+.page-header[data-v-21b434cc] {
+  margin-bottom: 2rem;
+}
+.sankey-card[data-v-21b434cc] {
+  overflow: visible;
+}
+.sankey-container[data-v-21b434cc] {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+}
+.sankey-svg[data-v-21b434cc] {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sankey-hint[data-v-21b434cc] {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  text-align: center;
+}
+.sankey-tooltip[data-v-21b434cc] {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.88);
+  color: #fff;
+  border: 1px solid #CD3735;
+  border-radius: 8px;
+  padding: 10px 14px;
+  pointer-events: none;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.8rem;
+  z-index: 100;
+  min-width: 160px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.tooltip-row[data-v-21b434cc] {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2px;
+}
+.tooltip-label[data-v-21b434cc] {
+  color: #9ca3af;
+  min-width: 46px;
+}
+.tooltip-value[data-v-21b434cc] {
+  color: #f3f4f6;
+  font-weight: 500;
+}
+.tooltip-count[data-v-21b434cc] {
+  color: #FFCE7B;
+  font-weight: 700;
+}
+.loading-state[data-v-21b434cc] {
+  text-align: center;
+  padding: 4rem;
+  color: #6b7280;
+  font-size: 1rem;
+}
+.chart-error[data-v-21b434cc] {
+  color: #CD3735;
+  padding: 2rem;
+  text-align: center;
+}

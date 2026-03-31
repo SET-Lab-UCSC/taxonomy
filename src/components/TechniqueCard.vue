@@ -1,4 +1,6 @@
 <script setup>
+import { computed } from 'vue'
+
 const props = defineProps({
   technique: { type: Object, required: true },
   exemplar: { type: Object, default: null },
@@ -6,7 +8,7 @@ const props = defineProps({
 
 const emit = defineEmits(['click'])
 
-const imageSrc = props.technique.Thumbnail || props.exemplar?.URL || null
+const imageSrc = computed(() => props.technique.Thumbnail || props.exemplar?.URL || null)
 </script>
 
 <template>

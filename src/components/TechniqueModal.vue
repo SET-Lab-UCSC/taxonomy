@@ -16,9 +16,6 @@ const emit = defineEmits(['close'])
       <div class="modal-content" style="max-height:80vh; overflow-y:auto;">
         <button class="modal-close" @click="emit('close')">×</button>
         <h2>{{ technique.Interaction_Technique }}</h2>
-        <p v-if="technique.Description" style="color:#4a4a4a; margin:0.75rem 0 1rem;">
-          {{ technique.Description }}
-        </p>
         <div v-if="observations.length" class="technique-modal-obs">
           <ObservationCard
             v-for="obs in observations"

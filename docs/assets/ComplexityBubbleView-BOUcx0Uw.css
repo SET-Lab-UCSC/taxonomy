@@ -1,0 +1,31 @@
+
+.legend[data-v-3eeaf4e9] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 16px;
+}
+.legend-item[data-v-3eeaf4e9] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+.legend-dot[data-v-3eeaf4e9] {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.chart-wrap[data-v-3eeaf4e9] {
+  position: relative;
+  height: 520px;
+}
+.status-msg[data-v-3eeaf4e9] {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 12px;
+}
+.status-msg.error[data-v-3eeaf4e9] {
+  color: #ef4444;
+}

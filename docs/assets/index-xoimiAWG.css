@@ -309,6 +309,12 @@ body {
 /* ===== MAIN CONTENT ===== */
 .main-content {
   padding: 2rem 3rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Analyses page gets a max-width constraint */
+.main-content.analyses-content {
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -329,8 +335,8 @@ body {
 /* ===== TECHNIQUE GALLERY (HomeView) ===== */
 .technique-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
   margin-top: 1.5rem;
 }
 
@@ -1473,4 +1479,151 @@ body {
 
 @media (max-width: 768px) {
     .feedback-item { padding: 1rem; flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
+
+/* === Activity filter chips === */
+.activity-filter-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.activity-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  align-items: center;
+}
+
+.activity-chip {
+  padding: 0.4rem 1rem;
+  border-radius: 0;
+  border: 1px solid #d1d5db;
+  border-right: none;
+  background: white;
+  color: #374151;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activity-chip:last-of-type {
+  border-right: 1px solid #d1d5db;
+}
+
+.activity-chip:hover {
+  background: #fef3f2;
+  border-color: #CD3735;
+  color: #CD3735;
+  z-index: 1;
+  position: relative;
+}
+
+.activity-chip.active {
+  background: linear-gradient(135deg, #FFCE7B, #E98708, #CD3735);
+  border-color: transparent;
+  color: white;
+  font-weight: 600;
+  z-index: 1;
+  position: relative;
+}
+
+.activity-chip-clear {
+  padding: 0.4rem 1rem;
+  border-radius: 0;
+  border: 1px solid #9ca3af;
+  background: white;
+  color: #6b7280;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 0.75rem;
+}
+
+.activity-chip-clear:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* === Home layout: gallery + filter sidebar === */
+.home-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 0 3rem 3rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.technique-gallery-wrapper {
+  flex: 1;
+  min-width: 0;
+  width: 0; /* forces flex child to shrink/grow properly */
+}
+
+/* === Filter panel === */
+.filter-panel {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 1rem;
+  border-left: 1px solid #e5e7eb;
+  padding-left: 1.5rem;
+}
+
+.filter-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.filter-panel-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.activity-filter-section {
+  padding: 0 0 1rem;
+}
+
+/* === SubNav dropdown === */
+.sub-nav-dropdown {
+  position: relative;
+}
+
+.sub-nav-dropdown-trigger {
+  cursor: pointer;
+}
+
+.sub-nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  z-index: 100;
+  min-width: 240px;
+  padding: 0.5rem 0;
+}
+
+.sub-nav-dropdown-item {
+  display: block;
+  padding: 0.5rem 1.25rem;
+  color: #374151;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+.sub-nav-dropdown-item:hover {
+  background: #fef3f2;
+  color: #CD3735;
 }

@@ -1,0 +1,194 @@
+
+.radar-content[data-v-3f64b18f] {
+  padding: 2rem 3rem;
+}
+.page-header-section[data-v-3f64b18f] {
+  margin-bottom: 2.5rem;
+  max-width: 800px;
+}
+.loading-state[data-v-3f64b18f],
+.error-state[data-v-3f64b18f],
+.empty-state[data-v-3f64b18f] {
+  padding: 3rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* ── Comparison panel ── */
+.comparison-panel[data-v-3f64b18f] {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+}
+.comparison-header[data-v-3f64b18f] {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.comparison-legend[data-v-3f64b18f] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.legend-item[data-v-3f64b18f] {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border: 2px solid;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #374151;
+  transition: opacity 0.15s;
+}
+.legend-item[data-v-3f64b18f]:hover {
+  opacity: 0.7;
+}
+.legend-dot[data-v-3f64b18f] {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.legend-remove[data-v-3f64b18f] {
+  font-size: 0.6rem;
+  color: #9ca3af;
+  margin-left: 0.2rem;
+}
+.comparison-radar-wrap[data-v-3f64b18f] {
+  display: flex;
+  justify-content: center;
+}
+.comparison-svg[data-v-3f64b18f] {
+  overflow: visible;
+}
+
+/* ── Radar grid ── */
+.radar-grid[data-v-3f64b18f] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+.radar-card[data-v-3f64b18f] {
+  padding: 1rem;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.radar-card.hovered[data-v-3f64b18f] {
+  box-shadow: 0 8px 24px rgba(205, 55, 53, 0.18);
+  transform: translateY(-2px);
+  z-index: 2;
+}
+.radar-card.in-comparison[data-v-3f64b18f] {
+  outline: 2px solid #E98708;
+}
+.radar-card-header[data-v-3f64b18f] {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.radar-app-name[data-v-3f64b18f] {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.2;
+  word-break: break-word;
+}
+.radar-obs-count[data-v-3f64b18f] {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-top: 0.15rem;
+}
+.radar-svg-wrap[data-v-3f64b18f] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.radar-svg[data-v-3f64b18f] {
+  overflow: visible;
+}
+
+/* ── Hover metrics ── */
+.radar-metrics[data-v-3f64b18f] {
+  width: 100%;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.radar-metric-row[data-v-3f64b18f] {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+}
+.metric-label[data-v-3f64b18f] {
+  width: 80px;
+  flex-shrink: 0;
+  color: #6b7280;
+  text-align: right;
+}
+.metric-bar-wrap[data-v-3f64b18f] {
+  flex: 1;
+  height: 5px;
+  background: #f3f4f6;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.metric-bar[data-v-3f64b18f] {
+  height: 100%;
+  background: linear-gradient(90deg, #FFCE7B, #CD3735);
+  border-radius: 9999px;
+  transition: width 0.3s;
+}
+.metric-val[data-v-3f64b18f] {
+  width: 24px;
+  text-align: right;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.68rem;
+}
+
+/* ── Compare button ── */
+.compare-btn[data-v-3f64b18f] {
+  margin-top: 0.6rem;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  border: 1.5px solid #d1d5db;
+  background: white;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.15s;
+}
+.compare-btn[data-v-3f64b18f]:hover {
+  border-color: #E98708;
+  color: #E98708;
+}
+.compare-btn.active[data-v-3f64b18f] {
+  background: #E98708;
+  border-color: #E98708;
+  color: white;
+}
+
+/* ── Axis labels on small radars (shown on hover) ── */
+.axis-label[data-v-3f64b18f] {
+  font-family: 'Work Sans', sans-serif;
+}
+@media (max-width: 768px) {
+.radar-content[data-v-3f64b18f] {
+    padding: 1.5rem 1.25rem;
+}
+.radar-grid[data-v-3f64b18f] {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+}

@@ -35,7 +35,6 @@ async function fetchCsv(fileName) {
 }
 
 export const useDataStore = defineStore('data', () => {
-  const techniques = ref([])
   const observations = ref([])
   const loading = ref(false)
   const error = ref(null)
@@ -46,12 +45,7 @@ export const useDataStore = defineStore('data', () => {
     loading.value = true
     error.value = null
     try {
-      const [techs, obs] = await Promise.all([
-        fetchCsv('Taxonomy Observations - Interaction Techniques.csv'),
-        fetchCsv('Taxonomy Observations - Observations.csv'),
-      ])
-      techniques.value = techs
-      observations.value = obs
+      observations.value = await fetchCsv('Taxonomy Observations - Observations.csv')
       loaded = true
     } catch (err) {
       error.value = err.message
@@ -59,6 +53,20 @@ export const useDataStore = defineStore('data', () => {
       loading.value = false
     }
   }
+
+  const techniques = computed(() => {
+    const allTechniques = new Set()
+    observations.value.forEach(o => {
+      (o.Interaction_Technique || '')
+        .split(',')
+        .map(t => t.trim())
+        .filter(Boolean)
+        .forEach(t => allTechniques.add(t))
+    })
+    return Array.from(allTechniques)
+      .sort()
+      .map(name => ({ Interaction_Technique: name }))
+  })
 
   const applications = computed(() => {
     const names = observations.value.map(o => (o.Application || '').trim()).filter(Boolean)

@@ -1,0 +1,26 @@
+
+.chord-wrapper[data-v-e84a96b2] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem 3rem;
+  overflow: visible;
+}
+.chord-wrapper svg[data-v-e84a96b2] {
+  overflow: visible;
+}
+.chord-tooltip[data-v-e84a96b2] {
+  position: fixed;
+  display: none;
+  background: rgba(17, 24, 39, 0.92);
+  color: #f9fafb;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Work Sans', sans-serif;
+  pointer-events: none;
+  z-index: 9999;
+  max-width: 240px;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}

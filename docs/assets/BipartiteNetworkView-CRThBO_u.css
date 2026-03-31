@@ -1,0 +1,112 @@
+
+.bipartite-controls[data-v-774ff7f6] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.layout-toggle[data-v-774ff7f6] {
+  font-size: 0.8rem;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  border: 1.5px solid #cd3735;
+  color: #cd3735;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.layout-toggle[data-v-774ff7f6]:hover {
+  background: #cd3735;
+  color: white;
+}
+.legend-row[data-v-774ff7f6] {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: #555;
+}
+.legend-section[data-v-774ff7f6] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.legend-label[data-v-774ff7f6] {
+  font-weight: 600;
+  color: #333;
+}
+.legend-items[data-v-774ff7f6] {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.legend-item[data-v-774ff7f6] {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.legend-dot[data-v-774ff7f6] {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.svg-container[data-v-774ff7f6] {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fafafa;
+}
+svg[data-v-774ff7f6] {
+  display: block;
+  width: 100%;
+}
+.network-tooltip[data-v-774ff7f6] {
+  position: absolute;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  max-width: 220px;
+  z-index: 10;
+  font-size: 0.8rem;
+}
+.tooltip-title[data-v-774ff7f6] {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #111;
+  margin-bottom: 4px;
+}
+.tooltip-meta[data-v-774ff7f6] {
+  color: #555;
+  margin-bottom: 6px;
+}
+.tooltip-list[data-v-774ff7f6] {
+  max-height: 140px;
+  overflow-y: auto;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 4px;
+}
+.tooltip-list-item[data-v-774ff7f6] {
+  color: #444;
+  padding: 1px 0;
+}
+.loading-overlay[data-v-774ff7f6] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  color: #555;
+}

@@ -276,7 +276,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="main-content">
+  <main class="main-content analyses-content">
     <div v-if="store.loading" class="loading-state">Loading…</div>
     <div v-else-if="store.error" class="chart-error">Error: {{ store.error }}</div>
     <template v-else>
