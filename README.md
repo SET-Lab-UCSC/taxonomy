@@ -1,4 +1,4 @@
-# Taxonomy of XR Interactions
+# Spatial Interaction Vault
 In-progress web visualization of XR interaction techniques.
 
 ## Development Instructions

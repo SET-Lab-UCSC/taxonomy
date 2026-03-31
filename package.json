@@ -1,5 +1,5 @@
 {
-  "name": "threejs-journey-exercise",
+  "name": "spatial-interaction-vault",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,12 +8,16 @@
     "build": "vite build"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
     "vite": "^5.3.3"
   },
   "dependencies": {
     "chart.js": "^4.5.1",
     "papaparse": "^5.5.3",
+    "pinia": "^2.1.7",
     "uniq": "^1.0.1",
+    "vue": "^3.4.0",
+    "vue-router": "^4.3.0",
     "xhr": "^2.6.0"
   }
 }
