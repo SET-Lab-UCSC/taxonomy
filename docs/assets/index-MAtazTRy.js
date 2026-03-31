@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObservationsView-BGoi3reh.js","assets/ObservationModal-BirppGVs.js","assets/ApplicationsView-aOVXZmsv.js","assets/AnalysesView-K56pXOKC.js","assets/auto-ByddkvQv.js","assets/SankeyView-C5V6Zxwu.js","assets/transform-BznNK3nw.js","assets/_plugin-vue_export-helper-1tPrXgE0.js","assets/init-CTO7spbL.js","assets/SankeyView-BHfBOeJu.css","assets/ChordView-DEusWWbZ.js","assets/ChordView-B0WXxA2s.css","assets/RadarView-CdhnIr8Z.js","assets/RadarView-B6e7HQ15.css","assets/ComplexityBubbleView-BILMNIT5.js","assets/ComplexityBubbleView-BOUcx0Uw.css","assets/BipartiteNetworkView-J-eQ-VXn.js","assets/BipartiteNetworkView-CRThBO_u.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObservationsView-CARr4WLY.js","assets/ObservationModal-DplJ40EG.js","assets/ApplicationsView-zJ7XGeT_.js","assets/AnalysesView-BUIRnWEB.js","assets/auto-ByddkvQv.js","assets/SankeyView-C1zNDneC.js","assets/transform-BznNK3nw.js","assets/_plugin-vue_export-helper-1tPrXgE0.js","assets/init-CTO7spbL.js","assets/SankeyView-BHfBOeJu.css","assets/ChordView-xtcXI88-.js","assets/ChordView-B0WXxA2s.css","assets/RadarView-B2Ar4FYs.js","assets/RadarView-B6e7HQ15.css","assets/ComplexityBubbleView-B1cOVZ0a.js","assets/ComplexityBubbleView-BOUcx0Uw.css","assets/BipartiteNetworkView-Dc_2navk.js","assets/BipartiteNetworkView-CRThBO_u.css"])))=>i.map(i=>d[i]);
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -9286,7 +9286,23 @@ const useDataStore = /* @__PURE__ */ defineStore("data", () => {
     loading.value = true;
     error.value = null;
     try {
-      observations.value = await fetchCsv("Taxonomy Observations - Observations.csv");
+      const [obs, apps] = await Promise.all([
+        fetchCsv("Taxonomy Observations - Observations.csv"),
+        fetchCsv("Taxonomy Applications.csv")
+      ]);
+      const appMeta = {};
+      apps.forEach((a) => {
+        var _a;
+        appMeta[(_a = a.Application) == null ? void 0 : _a.trim()] = a;
+      });
+      observations.value = obs.map((o) => {
+        var _a, _b, _c, _d;
+        return {
+          ...o,
+          Genre: ((_b = appMeta[(_a = o.Application) == null ? void 0 : _a.trim()]) == null ? void 0 : _b.Genre) || "",
+          Supported_Platforms: ((_d = appMeta[(_c = o.Application) == null ? void 0 : _c.trim()]) == null ? void 0 : _d.Supported_Platforms) || ""
+        };
+      });
       loaded = true;
     } catch (err) {
       error.value = err.message;
@@ -9671,16 +9687,16 @@ const _sfc_main$3 = {
 };
 const routes = [
   { path: "/", component: _sfc_main$3 },
-  { path: "/observations", component: () => __vitePreload(() => import("./ObservationsView-BGoi3reh.js"), true ? __vite__mapDeps([0,1]) : void 0) },
-  { path: "/applications", component: () => __vitePreload(() => import("./ApplicationsView-aOVXZmsv.js"), true ? __vite__mapDeps([2,1]) : void 0) },
-  { path: "/analyses", component: () => __vitePreload(() => import("./AnalysesView-K56pXOKC.js"), true ? __vite__mapDeps([3,4]) : void 0) },
-  { path: "/viz/sankey", component: () => __vitePreload(() => import("./SankeyView-C5V6Zxwu.js"), true ? __vite__mapDeps([5,6,7,8,9]) : void 0) },
-  { path: "/viz/embodiment", component: () => __vitePreload(() => import("./EmbodimentView-YiuOuoMD.js"), true ? [] : void 0) },
-  { path: "/viz/chord", component: () => __vitePreload(() => import("./ChordView-DEusWWbZ.js"), true ? __vite__mapDeps([10,6,7,8,11]) : void 0) },
-  { path: "/viz/radar", component: () => __vitePreload(() => import("./RadarView-CdhnIr8Z.js"), true ? __vite__mapDeps([12,7,13]) : void 0) },
-  { path: "/viz/feedback", component: () => __vitePreload(() => import("./FeedbackMatrixView-_N49IJMr.js"), true ? [] : void 0) },
-  { path: "/viz/complexity", component: () => __vitePreload(() => import("./ComplexityBubbleView-BILMNIT5.js"), true ? __vite__mapDeps([14,4,7,15]) : void 0) },
-  { path: "/viz/network", component: () => __vitePreload(() => import("./BipartiteNetworkView-J-eQ-VXn.js"), true ? __vite__mapDeps([16,6,7,17]) : void 0) }
+  { path: "/observations", component: () => __vitePreload(() => import("./ObservationsView-CARr4WLY.js"), true ? __vite__mapDeps([0,1]) : void 0) },
+  { path: "/applications", component: () => __vitePreload(() => import("./ApplicationsView-zJ7XGeT_.js"), true ? __vite__mapDeps([2,1]) : void 0) },
+  { path: "/analyses", component: () => __vitePreload(() => import("./AnalysesView-BUIRnWEB.js"), true ? __vite__mapDeps([3,4]) : void 0) },
+  { path: "/viz/sankey", component: () => __vitePreload(() => import("./SankeyView-C1zNDneC.js"), true ? __vite__mapDeps([5,6,7,8,9]) : void 0) },
+  { path: "/viz/embodiment", component: () => __vitePreload(() => import("./EmbodimentView-Ny8Nahqt.js"), true ? [] : void 0) },
+  { path: "/viz/chord", component: () => __vitePreload(() => import("./ChordView-xtcXI88-.js"), true ? __vite__mapDeps([10,6,7,8,11]) : void 0) },
+  { path: "/viz/radar", component: () => __vitePreload(() => import("./RadarView-B2Ar4FYs.js"), true ? __vite__mapDeps([12,7,13]) : void 0) },
+  { path: "/viz/feedback", component: () => __vitePreload(() => import("./FeedbackMatrixView-Dz2Dlrbc.js"), true ? [] : void 0) },
+  { path: "/viz/complexity", component: () => __vitePreload(() => import("./ComplexityBubbleView-B1cOVZ0a.js"), true ? __vite__mapDeps([14,4,7,15]) : void 0) },
+  { path: "/viz/network", component: () => __vitePreload(() => import("./BipartiteNetworkView-Dc_2navk.js"), true ? __vite__mapDeps([16,6,7,17]) : void 0) }
 ];
 const router = createRouter({
   history: createWebHistory("https://set-lab-ucsc.github.io/taxonomy/"),
@@ -9822,8 +9838,8 @@ export {
   unref as b,
   createElementBlock as c,
   createBaseVNode as d,
-  createCommentVNode as e,
-  computed as f,
+  computed as e,
+  createCommentVNode as f,
   ref as g,
   openBlock as h,
   createBlock as i,
@@ -9843,4 +9859,4 @@ export {
   watch as w,
   reactive as x
 };
-//# sourceMappingURL=index-oTcuwcvi.js.map
+//# sourceMappingURL=index-MAtazTRy.js.map

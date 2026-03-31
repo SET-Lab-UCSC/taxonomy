@@ -69,6 +69,7 @@ const selectedObs = ref(null)
     <template v-else>
       <div class="page-header">
         <h2 class="page-title">Observations</h2>
+        <p class="page-description">Viewing {{ filtered.length }} observation{{ filtered.length === 1 ? '' : 's' }}</p>
       </div>
 
       <div class="home-layout">

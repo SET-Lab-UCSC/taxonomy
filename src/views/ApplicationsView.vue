@@ -7,11 +7,34 @@ import ObservationModal from '../components/ObservationModal.vue'
 const store = useDataStore()
 onMounted(async () => {
   await store.load()
-  if (store.applications.length) selectedApp.value = store.applications[0]
+  if (filteredApps.value.length) selectedApp.value = filteredApps.value[0]
 })
 
 const selectedApp = ref(null)
 const selectedObs = ref(null)
+const activeGenres = ref(new Set())
+
+// All unique genres across observations
+const allGenres = computed(() => {
+  const genres = new Set()
+  store.observations.forEach(o => {
+    const g = (o.Genre || '').trim()
+    if (g) genres.add(g)
+  })
+  return [...genres].sort()
+})
+
+// Genre for a given app (first non-empty value)
+function appGenre(app) {
+  const obs = store.observations.find(o => o.Application === app && o.Genre)
+  return (obs?.Genre || '').trim()
+}
+
+// Apps filtered by active genre chips
+const filteredApps = computed(() => {
+  if (activeGenres.value.size === 0) return store.applications
+  return store.applications.filter(app => activeGenres.value.has(appGenre(app)))
+})
 
 const appObservations = computed(() =>
   selectedApp.value ? store.observationsByApplication(selectedApp.value) : []
@@ -20,6 +43,24 @@ const appObservations = computed(() =>
 function uniqueMeta(field) {
   return [...new Set(appObservations.value.map(o => (o[field] || '').trim()).filter(Boolean))].join(', ') || '—'
 }
+
+function toggleGenre(g) {
+  const next = new Set(activeGenres.value)
+  if (next.has(g)) next.delete(g)
+  else next.add(g)
+  activeGenres.value = next
+}
+
+function clearGenres() {
+  activeGenres.value = new Set()
+}
+
+// Auto-select first app when filter changes
+watch(filteredApps, (apps) => {
+  if (!apps.includes(selectedApp.value)) {
+    selectedApp.value = apps[0] || null
+  }
+})
 
 watch(() => store.applications, (apps) => {
   if (apps.length && !selectedApp.value) selectedApp.value = apps[0]
@@ -33,12 +74,31 @@ watch(() => store.applications, (apps) => {
     <template v-else>
       <div class="page-header">
         <h2 class="page-title">Applications</h2>
+        <p class="page-description">Viewing {{ filteredApps.length }} application{{ filteredApps.length === 1 ? '' : 's' }}</p>
       </div>
+
+      <!-- Genre filter -->
+      <div v-if="allGenres.length" class="filter-panel" style="position:static; border-left:none; padding-left:0; border-bottom:1px solid #e5e7eb; margin-bottom:1.5rem; padding-bottom:1rem;">
+        <div class="filter-panel-header">
+          <span class="filter-panel-title">Filter by Genre</span>
+          <button v-if="activeGenres.size > 0" class="activity-chip-clear" @click="clearGenres">✕ Clear</button>
+        </div>
+        <div class="activity-filter-bar">
+          <button
+            v-for="g in allGenres"
+            :key="g"
+            class="activity-chip"
+            :class="{ active: activeGenres.has(g) }"
+            @click="toggleGenre(g)"
+          >{{ g }}</button>
+        </div>
+      </div>
+
       <div class="apps-layout">
         <aside class="apps-sidebar">
           <div class="apps-sidebar-title">Applications</div>
           <div
-            v-for="app in store.applications"
+            v-for="app in filteredApps"
             :key="app"
             class="app-list-item"
             :class="{ active: selectedApp === app }"
@@ -59,15 +119,10 @@ watch(() => store.applications, (apps) => {
                 <div class="app-meta-label">Platforms</div>
                 <div class="app-meta-value">{{ uniqueMeta('Supported_Platforms') }}</div>
               </div>
-              <div class="app-meta-item">
-                <div class="app-meta-label">Cost</div>
-                <div class="app-meta-value">{{ uniqueMeta('Cost') }}</div>
-              </div>
-              <div class="app-meta-item">
-                <div class="app-meta-label">Scale of Use</div>
-                <div class="app-meta-value">{{ uniqueMeta('Scale_Of_Use') }}</div>
-              </div>
             </div>
+            <p style="color:#6b7280; font-size:0.9rem; margin-bottom:1rem;">
+              {{ appObservations.length }} observation{{ appObservations.length === 1 ? '' : 's' }}
+            </p>
             <div class="obs-gallery">
               <ObservationCard
                 v-for="obs in appObservations"

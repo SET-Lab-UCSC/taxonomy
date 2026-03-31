@@ -45,7 +45,18 @@ export const useDataStore = defineStore('data', () => {
     loading.value = true
     error.value = null
     try {
-      observations.value = await fetchCsv('Taxonomy Observations - Observations.csv')
+      const [obs, apps] = await Promise.all([
+        fetchCsv('Taxonomy Observations - Observations.csv'),
+        fetchCsv('Taxonomy Applications.csv'),
+      ])
+      // Merge app metadata into observations
+      const appMeta = {}
+      apps.forEach(a => { appMeta[a.Application?.trim()] = a })
+      observations.value = obs.map(o => ({
+        ...o,
+        Genre: appMeta[o.Application?.trim()]?.Genre || '',
+        Supported_Platforms: appMeta[o.Application?.trim()]?.Supported_Platforms || '',
+      }))
       loaded = true
     } catch (err) {
       error.value = err.message
