@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObservationsView-DkRL_67h.js","assets/ObservationModal-BC_QVNYl.js","assets/ApplicationsView-Damfyb7g.js","assets/AnalysesView-CflKZIBn.js","assets/transform-BznNK3nw.js","assets/sankeyLinkHorizontal-D6Slmp3Z.js","assets/auto-ByddkvQv.js","assets/SankeyView-BFFYaEMD.js","assets/_plugin-vue_export-helper-1tPrXgE0.js","assets/init-CTO7spbL.js","assets/SankeyView-BHfBOeJu.css","assets/ChordView-4HXHqHnc.js","assets/ChordView-B0WXxA2s.css","assets/RadarView-CQcBNLV0.js","assets/RadarView-B6e7HQ15.css","assets/ComplexityBubbleView-DJZe0pMH.js","assets/ComplexityBubbleView-BOUcx0Uw.css","assets/BipartiteNetworkView-CrLtw3uV.js","assets/BipartiteNetworkView-CRThBO_u.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObservationsView-BfhQtGq2.js","assets/ObservationModal-mA6J1_bO.js","assets/ApplicationsView-BaAtbZ0q.js","assets/AnalysesView-CiRLE8y1.js","assets/transform-BznNK3nw.js","assets/sankeyLinkHorizontal-D6Slmp3Z.js","assets/auto-ByddkvQv.js","assets/SankeyView-yFxW1FsR.js","assets/_plugin-vue_export-helper-1tPrXgE0.js","assets/init-CTO7spbL.js","assets/SankeyView-BHfBOeJu.css","assets/ChordView-D24YbaEr.js","assets/ChordView-B0WXxA2s.css","assets/RadarView-CG54UNqE.js","assets/RadarView-B6e7HQ15.css","assets/ComplexityBubbleView-D0M7jyKh.js","assets/ComplexityBubbleView-BOUcx0Uw.css","assets/BipartiteNetworkView-CyzLsgEq.js","assets/BipartiteNetworkView-CRThBO_u.css"])))=>i.map(i=>d[i]);
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -7223,7 +7223,7 @@ function defineStore(idOrOptions, setup, setupOptions) {
 }
 const scriptRel = "modulepreload";
 const assetsURL = function(dep) {
-  return "https://set-lab-ucsc.github.io/taxonomy/" + dep;
+  return "/taxonomy/" + dep;
 };
 const seen = {};
 const __vitePreload = function preload(baseModule, deps, importerUrl) {
@@ -9246,7 +9246,7 @@ License: MIT
 var papaparse_minExports = papaparse_min.exports;
 const Papa = /* @__PURE__ */ getDefaultExportFromCjs(papaparse_minExports);
 async function fetchCsv(fileName) {
-  const basePath = "https://set-lab-ucsc.github.io/taxonomy/";
+  const basePath = "/taxonomy/";
   const paths = [`./${fileName}`, `${basePath}${fileName}`, `/${fileName}`];
   for (const path of paths) {
     try {
@@ -9689,19 +9689,19 @@ const _sfc_main$3 = {
 };
 const routes = [
   { path: "/", component: _sfc_main$3 },
-  { path: "/observations", component: () => __vitePreload(() => import("./ObservationsView-DkRL_67h.js"), true ? __vite__mapDeps([0,1]) : void 0) },
-  { path: "/applications", component: () => __vitePreload(() => import("./ApplicationsView-Damfyb7g.js"), true ? __vite__mapDeps([2,1]) : void 0) },
-  { path: "/analyses", component: () => __vitePreload(() => import("./AnalysesView-CflKZIBn.js"), true ? __vite__mapDeps([3,4,5,6]) : void 0) },
-  { path: "/viz/sankey", component: () => __vitePreload(() => import("./SankeyView-BFFYaEMD.js"), true ? __vite__mapDeps([7,4,5,8,9,10]) : void 0) },
-  { path: "/viz/embodiment", component: () => __vitePreload(() => import("./EmbodimentView-EFHmmQzB.js"), true ? [] : void 0) },
-  { path: "/viz/chord", component: () => __vitePreload(() => import("./ChordView-4HXHqHnc.js"), true ? __vite__mapDeps([11,4,8,9,12]) : void 0) },
-  { path: "/viz/radar", component: () => __vitePreload(() => import("./RadarView-CQcBNLV0.js"), true ? __vite__mapDeps([13,8,14]) : void 0) },
-  { path: "/viz/feedback", component: () => __vitePreload(() => import("./FeedbackMatrixView-BUvdhNSK.js"), true ? [] : void 0) },
-  { path: "/viz/complexity", component: () => __vitePreload(() => import("./ComplexityBubbleView-DJZe0pMH.js"), true ? __vite__mapDeps([15,6,8,16]) : void 0) },
-  { path: "/viz/network", component: () => __vitePreload(() => import("./BipartiteNetworkView-CrLtw3uV.js"), true ? __vite__mapDeps([17,4,8,18]) : void 0) }
+  { path: "/observations", component: () => __vitePreload(() => import("./ObservationsView-BfhQtGq2.js"), true ? __vite__mapDeps([0,1]) : void 0) },
+  { path: "/applications", component: () => __vitePreload(() => import("./ApplicationsView-BaAtbZ0q.js"), true ? __vite__mapDeps([2,1]) : void 0) },
+  { path: "/analyses", component: () => __vitePreload(() => import("./AnalysesView-CiRLE8y1.js"), true ? __vite__mapDeps([3,4,5,6]) : void 0) },
+  { path: "/viz/sankey", component: () => __vitePreload(() => import("./SankeyView-yFxW1FsR.js"), true ? __vite__mapDeps([7,4,5,8,9,10]) : void 0) },
+  { path: "/viz/embodiment", component: () => __vitePreload(() => import("./EmbodimentView-fgkyXBat.js"), true ? [] : void 0) },
+  { path: "/viz/chord", component: () => __vitePreload(() => import("./ChordView-D24YbaEr.js"), true ? __vite__mapDeps([11,4,8,9,12]) : void 0) },
+  { path: "/viz/radar", component: () => __vitePreload(() => import("./RadarView-CG54UNqE.js"), true ? __vite__mapDeps([13,8,14]) : void 0) },
+  { path: "/viz/feedback", component: () => __vitePreload(() => import("./FeedbackMatrixView-D1HQ3m1A.js"), true ? [] : void 0) },
+  { path: "/viz/complexity", component: () => __vitePreload(() => import("./ComplexityBubbleView-D0M7jyKh.js"), true ? __vite__mapDeps([15,6,8,16]) : void 0) },
+  { path: "/viz/network", component: () => __vitePreload(() => import("./BipartiteNetworkView-CyzLsgEq.js"), true ? __vite__mapDeps([17,4,8,18]) : void 0) }
 ];
 const router = createRouter({
-  history: createWebHistory("https://set-lab-ucsc.github.io/taxonomy/"),
+  history: createWebHistory("/taxonomy/"),
   routes
 });
 const _hoisted_1$1 = { class: "header" };
@@ -9826,4 +9826,4 @@ export {
   vShow as x,
   reactive as y
 };
-//# sourceMappingURL=index-HcNk-XNx.js.map
+//# sourceMappingURL=index-BERREmoa.js.map

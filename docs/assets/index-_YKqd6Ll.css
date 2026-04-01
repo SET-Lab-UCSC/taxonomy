@@ -1,8 +1,8 @@
 /* ===== FONTS ===== */
 @font-face {
   font-family: 'DT Getai Grotesk Display';
-  src: url('https://set-lab-ucsc.github.io/taxonomy/assets/DTGetaiGroteskDisplay-Black-WnMDOzuF.ttf') format('truetype'),
-       url('https://set-lab-ucsc.github.io/taxonomy/assets/DTGetaiGroteskDisplay-Black-DwXJjRPG.otf') format('opentype');
+  src: url('/taxonomy/assets/DTGetaiGroteskDisplay-Black-WnMDOzuF.ttf') format('truetype'),
+       url('/taxonomy/assets/DTGetaiGroteskDisplay-Black-DwXJjRPG.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

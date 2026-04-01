@@ -8,7 +8,7 @@ const isCodeSandbox =
 export default defineConfig({
   root: resolve(__dirname, "src"),
   publicDir: "../static/",
-  base: "https://set-lab-ucsc.github.io/taxonomy/",
+  base: "/taxonomy/",
   build: {
     outDir: "../docs",
     emptyOutDir: true,
