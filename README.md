@@ -1,5 +1,5 @@
 # Spatial Interaction Vault
-In-progress web visualization of XR interaction techniques.
+Web visualization of XR interaction techniques.
 
 ## Development Instructions
 Clone repository locally or use GitHub Codespaces to launch a development environment
@@ -10,9 +10,6 @@ Clone repository locally or use GitHub Codespaces to launch a development enviro
 ### Build and Deploy
 `npm run build`
 Commit changes to deploy with GitHub Pages
-### Adding New .html Page in src
-If adding a new page, add the source to `vite.config.js` ie. `explore: resolve(__dirname, 'src/explore.html'),`
-
 ## Observation Instructions
 ### GIF Collection
 1. Obtain observation on headset: Meta button + Right Trigger to record.
