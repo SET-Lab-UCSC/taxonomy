@@ -8,7 +8,6 @@ const store = useDataStore()
 onMounted(() => store.load())
 
 const activeFilters = ref({
-  Application: new Set(),
   Interaction_Technique: new Set(),
   Activity: new Set(),
   Task: new Set(),
@@ -26,7 +25,6 @@ function uniqueChipValues(field) {
   })
 }
 
-const allApps        = uniqueChipValues('Application')
 const allTechniques  = uniqueChipValues('Interaction_Technique')
 const allActivities  = uniqueChipValues('Activity')
 const allTasks       = uniqueChipValues('Task')
@@ -93,15 +91,6 @@ const selectedObs = ref(null)
           <div class="filter-panel-header">
             <span class="filter-panel-title">Filter Observations</span>
             <button v-if="anyActive" class="activity-chip-clear" @click="clearAll">✕ Clear all</button>
-          </div>
-
-          <div class="activity-filter-section">
-            <div class="activity-filter-label">Application</div>
-            <div class="activity-filter-bar">
-              <button v-for="v in allApps" :key="v"
-                class="activity-chip" :class="{ active: activeFilters.Application.has(v) }"
-                @click="toggle('Application', v)">{{ v }}</button>
-            </div>
           </div>
 
           <div class="activity-filter-section">

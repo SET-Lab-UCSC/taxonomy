@@ -1,5 +1,7 @@
+import { s as select } from "./transform-BznNK3nw.js";
+import { S as Sankey, s as sankeyLinkHorizontal } from "./sankeyLinkHorizontal-D6Slmp3Z.js";
 import { C as Chart } from "./auto-ByddkvQv.js";
-import { u as useDataStore, o as onMounted, g as ref, c as createElementBlock, b as unref, t as toDisplayString, F as Fragment, d as createBaseVNode, f as createCommentVNode, k as createStaticVNode, n as normalizeClass, r as renderList, h as openBlock, l as normalizeStyle } from "./index-MAtazTRy.js";
+import { u as useDataStore, o as onMounted, g as ref, k as nextTick, c as createElementBlock, b as unref, t as toDisplayString, F as Fragment, d as createBaseVNode, l as createStaticVNode, h as openBlock } from "./index-HcNk-XNx.js";
 const _hoisted_1 = { class: "main-content analyses-content" };
 const _hoisted_2 = {
   key: 0,
@@ -12,17 +14,7 @@ const _hoisted_3 = {
 const _hoisted_4 = { class: "viz-card" };
 const _hoisted_5 = { class: "canvas-wrapper-tall" };
 const _hoisted_6 = { class: "viz-card" };
-const _hoisted_7 = { class: "toggle-group" };
-const _hoisted_8 = { class: "canvas-wrapper-tall" };
-const _hoisted_9 = {
-  key: 0,
-  class: "viz-card"
-};
-const _hoisted_10 = { class: "matrix-wrapper" };
-const _hoisted_11 = { class: "matrix-table" };
-const _hoisted_12 = { class: "row-label" };
-const _hoisted_13 = ["title"];
-const _hoisted_14 = { style: { "font-weight": "700", "color": "#CD3735" } };
+const _hoisted_7 = { class: "canvas-wrapper-tall" };
 const _sfc_main = {
   __name: "AnalysesView",
   setup(__props) {
@@ -153,7 +145,6 @@ const _sfc_main = {
     function getGenre(app) {
       return GENRE_MAP[app] || "Other";
     }
-    const isStacked = ref(true);
     const matrixData = ref(null);
     function buildTechGenreMatrix(observations) {
       const techGenre = {};
@@ -163,13 +154,13 @@ const _sfc_main = {
         const app = (obs.Application || "").trim();
         if (!app) return;
         const genre = getGenre(app);
-        const techRaw = (obs.Interaction_Technique || "").trim();
-        if (!techRaw) return;
-        const techs = techRaw.split(",").map((t) => t.trim()).filter(Boolean);
-        techs.forEach((tech) => {
-          if (!techGenre[tech]) techGenre[tech] = {};
-          techGenre[tech][genre] = (techGenre[tech][genre] || 0) + 1;
-          techTotal[tech] = (techTotal[tech] || 0) + 1;
+        const taskRaw = (obs.Task || "").trim();
+        if (!taskRaw) return;
+        const tasks = taskRaw.split(",").map((t) => t.trim()).filter(Boolean);
+        tasks.forEach((task) => {
+          if (!techGenre[task]) techGenre[task] = {};
+          techGenre[task][genre] = (techGenre[task][genre] || 0) + 1;
+          techTotal[task] = (techTotal[task] || 0) + 1;
           genreSet.add(genre);
         });
       });
@@ -190,8 +181,8 @@ const _sfc_main = {
           return ((_a = techGenre[t]) == null ? void 0 : _a[genre]) || 0;
         }),
         backgroundColor: GENRE_COLORS[genre] || "rgba(107,114,128,0.7)",
-        borderWidth: stacked ? 0 : 1,
-        borderColor: stacked ? void 0 : "rgba(255,255,255,0.5)"
+        borderWidth: 0,
+        borderColor: void 0
       }));
       freqChartInstance = new Chart(freqChart.value, {
         type: "bar",
@@ -228,6 +219,11 @@ const _sfc_main = {
                 font: { family: "'Work Sans', sans-serif", size: 10 },
                 maxRotation: 45,
                 minRotation: 30
+              },
+              title: {
+                display: true,
+                text: "Task",
+                font: { family: "'Work Sans', sans-serif", size: 12 }
               }
             },
             y: {
@@ -244,40 +240,98 @@ const _sfc_main = {
         }
       });
     }
-    function setStacked(val) {
-      isStacked.value = val;
-      if (matrixData.value) renderFreqChart(matrixData.value, val);
-    }
-    function cellBg(count, maxCount) {
-      if (!count) return "#ffffff";
-      const alpha = 0.1 + count / maxCount * 0.8;
-      return `rgba(205,55,53,${alpha.toFixed(2)})`;
-    }
-    function cellFg(count, maxCount) {
-      return count / maxCount > 0.6 ? "#ffffff" : "#374151";
-    }
-    function heatmaxCount(matrix) {
-      return Math.max(...matrix.techniques.flatMap((t) => matrix.genres.map((g) => {
-        var _a;
-        return ((_a = matrix.techGenre[t]) == null ? void 0 : _a[g]) || 0;
-      })));
+    const sankeyContainer = ref(null);
+    function renderActivityTaskSankey(observations) {
+      const el = sankeyContainer.value;
+      if (!el) return;
+      const width = el.clientWidth || 800;
+      const height = 520;
+      const margin = { top: 20, right: 180, bottom: 20, left: 180 };
+      select(el).selectAll("*").remove();
+      const svg = select(el).append("svg").attr("width", width).attr("height", height);
+      const ACTIVITY_COLORS = {
+        "Manipulation": "#CD3735",
+        "Locomotion": "#E98708",
+        "System Control": "#FFCE7B",
+        "Activation": "#a78bfa",
+        "Evading": "#10b981",
+        "Creation": "#3b82f6",
+        "Communication": "#f472b6"
+      };
+      const ACTIVITY_COLOR_DEFAULT = "#6b7280";
+      const TASK_COLOR = "rgba(107,114,128,0.75)";
+      function activityColor(name) {
+        return ACTIVITY_COLORS[name] || ACTIVITY_COLOR_DEFAULT;
+      }
+      const linkMap = {};
+      observations.forEach((obs) => {
+        const activities = (obs.Activity || "").split(",").map((a) => a.trim()).filter(Boolean);
+        const tasks = (obs.Task || "").split(",").map((t) => t.trim()).filter(Boolean);
+        activities.forEach((act) => {
+          tasks.forEach((task) => {
+            const key = `${act}|||${task}`;
+            linkMap[key] = (linkMap[key] || 0) + 1;
+          });
+        });
+      });
+      if (Object.keys(linkMap).length === 0) return;
+      const activityNames = /* @__PURE__ */ new Set();
+      const taskNames = /* @__PURE__ */ new Set();
+      Object.keys(linkMap).forEach((k) => {
+        const [a, t] = k.split("|||");
+        activityNames.add(a);
+        taskNames.add(t);
+      });
+      const rawNodes = [];
+      const nodeIndexMap = {};
+      activityNames.forEach((name) => {
+        const key = `act:${name}`;
+        nodeIndexMap[key] = rawNodes.length;
+        rawNodes.push({ id: key, label: name, isActivity: true });
+      });
+      taskNames.forEach((name) => {
+        const key = `task:${name}`;
+        nodeIndexMap[key] = rawNodes.length;
+        rawNodes.push({ id: key, label: name, isActivity: false });
+      });
+      const rawLinks = Object.entries(linkMap).map(([k, v]) => {
+        const [a, t] = k.split("|||");
+        return {
+          source: nodeIndexMap[`act:${a}`],
+          target: nodeIndexMap[`task:${t}`],
+          value: v,
+          activityName: a
+        };
+      });
+      const { nodes: sNodes, links: sLinks } = Sankey().nodeWidth(14).nodePadding(12).extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]])(
+        {
+          nodes: rawNodes.map((d) => ({ ...d })),
+          links: rawLinks.map((d) => ({ ...d }))
+        }
+      );
+      svg.append("g").selectAll("path").data(sLinks).join("path").attr("d", sankeyLinkHorizontal()).attr("fill", "none").attr("stroke", (d) => activityColor(d.activityName)).attr("stroke-width", (d) => Math.max(1, d.width)).attr("stroke-opacity", 0.3).append("title").text((d) => `${d.source.label} → ${d.target.label}: ${d.value}`);
+      const nodeG = svg.append("g").selectAll("g").data(sNodes).join("g");
+      nodeG.append("rect").attr("x", (d) => d.x0).attr("y", (d) => d.y0).attr("width", (d) => d.x1 - d.x0).attr("height", (d) => Math.max(1, d.y1 - d.y0)).attr("fill", (d) => d.isActivity ? activityColor(d.label) : TASK_COLOR);
+      nodeG.append("text").attr("x", (d) => d.isActivity ? d.x0 - 8 : d.x1 + 8).attr("y", (d) => (d.y0 + d.y1) / 2).attr("dy", "0.35em").attr("text-anchor", (d) => d.isActivity ? "end" : "start").attr("font-family", "'Work Sans', sans-serif").attr("font-size", 11).attr("fill", "#374151").text((d) => d.label);
     }
     onMounted(async () => {
       await store.load();
       renderConvergenceChart(store.observations);
       matrixData.value = buildTechGenreMatrix(store.observations);
-      renderFreqChart(matrixData.value, isStacked.value);
+      renderFreqChart(matrixData.value, true);
+      await nextTick();
+      renderActivityTaskSankey(store.observations);
     });
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("main", _hoisted_1, [
         unref(store).loading ? (openBlock(), createElementBlock("div", _hoisted_2, "Loading…")) : unref(store).error ? (openBlock(), createElementBlock("div", _hoisted_3, "Error: " + toDisplayString(unref(store).error), 1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
-          _cache[11] || (_cache[11] = createBaseVNode("div", { class: "page-header" }, [
+          _cache[5] || (_cache[5] = createBaseVNode("div", { class: "page-header" }, [
             createBaseVNode("h2", { class: "page-title" }, "Analyses"),
             createBaseVNode("p", { class: "page-description" }, " Visual analyses of interaction technique patterns across applications and observations. ")
           ], -1)),
           createBaseVNode("div", _hoisted_4, [
-            _cache[2] || (_cache[2] = createBaseVNode("div", { class: "viz-card-title" }, "Interaction Technique Convergence", -1)),
-            _cache[3] || (_cache[3] = createBaseVNode("p", {
+            _cache[0] || (_cache[0] = createBaseVNode("div", { class: "viz-card-title" }, "Interaction Technique Convergence", -1)),
+            _cache[1] || (_cache[1] = createBaseVNode("p", {
               class: "page-description",
               style: { "margin-bottom": "1rem" }
             }, " Each bubble is one interaction technique. Horizontal axis = distinct applications using it; vertical axis = total observations. Convergent techniques appear on the right. ", -1)),
@@ -287,71 +341,21 @@ const _sfc_main = {
                 ref: convergenceCanvas
               }, null, 512)
             ]),
-            _cache[4] || (_cache[4] = createStaticVNode('<div class="axis-labels"><span>← Divergent (unique to one app)</span><span>Convergent (shared across many apps) →</span></div><div class="viz-legend" style="margin-top:1rem;"><div class="viz-legend-item"><div class="viz-legend-swatch" style="background:rgba(239,68,68,0.75);"></div><span>Divergent — 1 application</span></div><div class="viz-legend-item"><div class="viz-legend-swatch" style="background:rgba(251,146,60,0.75);"></div><span>Semi-convergent — 2–3 applications</span></div><div class="viz-legend-item"><div class="viz-legend-swatch" style="background:rgba(20,184,166,0.75);"></div><span>Convergent — 4+ applications</span></div></div>', 2))
+            _cache[2] || (_cache[2] = createStaticVNode('<div class="axis-labels"><span>← Divergent (unique to one app)</span><span>Convergent (shared across many apps) →</span></div><div class="viz-legend" style="margin-top:1rem;"><div class="viz-legend-item"><div class="viz-legend-swatch" style="background:rgba(239,68,68,0.75);"></div><span>Divergent — 1 application</span></div><div class="viz-legend-item"><div class="viz-legend-swatch" style="background:rgba(251,146,60,0.75);"></div><span>Semi-convergent — 2–3 applications</span></div><div class="viz-legend-item"><div class="viz-legend-swatch" style="background:rgba(20,184,166,0.75);"></div><span>Convergent — 4+ applications</span></div></div>', 2))
           ]),
           createBaseVNode("div", _hoisted_6, [
-            _cache[5] || (_cache[5] = createBaseVNode("div", { class: "viz-card-title" }, "Interaction Techniques × Genre", -1)),
-            _cache[6] || (_cache[6] = createBaseVNode("p", {
+            _cache[3] || (_cache[3] = createBaseVNode("div", { class: "viz-card-title" }, "Tasks × Genre", -1)),
+            _cache[4] || (_cache[4] = createBaseVNode("p", {
               class: "page-description",
               style: { "margin-bottom": "1rem" }
-            }, " A stacked bar chart showing how often each interaction technique appears, broken down by application genre. Each bar represents one technique sorted by total observation count (left = most frequent). Stack segments show which genres contribute to that technique's usage — revealing which techniques are genre-specific versus cross-genre. Toggle between stacked and grouped views. ", -1)),
+            }, " Task frequency broken down by application genre. Reveals which tasks are cross-genre standards and which are genre-specific. ", -1)),
             createBaseVNode("div", _hoisted_7, [
-              createBaseVNode("button", {
-                class: normalizeClass(["toggle-btn", { active: isStacked.value }]),
-                onClick: _cache[0] || (_cache[0] = ($event) => setStacked(true))
-              }, "Stacked", 2),
-              createBaseVNode("button", {
-                class: normalizeClass(["toggle-btn", { active: !isStacked.value }]),
-                onClick: _cache[1] || (_cache[1] = ($event) => setStacked(false))
-              }, "Grouped", 2)
-            ]),
-            createBaseVNode("div", _hoisted_8, [
               createBaseVNode("canvas", {
                 ref_key: "freqChart",
                 ref: freqChart
               }, null, 512)
             ])
-          ]),
-          matrixData.value ? (openBlock(), createElementBlock("div", _hoisted_9, [
-            _cache[9] || (_cache[9] = createBaseVNode("div", { class: "viz-card-title" }, "Genre Breakdown per Technique", -1)),
-            createBaseVNode("div", _hoisted_10, [
-              createBaseVNode("table", _hoisted_11, [
-                createBaseVNode("thead", null, [
-                  createBaseVNode("tr", null, [
-                    _cache[7] || (_cache[7] = createBaseVNode("th", { class: "row-header" }, "Technique", -1)),
-                    (openBlock(true), createElementBlock(Fragment, null, renderList(matrixData.value.genres, (genre) => {
-                      return openBlock(), createElementBlock("th", { key: genre }, toDisplayString(genre), 1);
-                    }), 128)),
-                    _cache[8] || (_cache[8] = createBaseVNode("th", { style: { "font-weight": "700" } }, "Total", -1))
-                  ])
-                ]),
-                createBaseVNode("tbody", null, [
-                  (openBlock(true), createElementBlock(Fragment, null, renderList(matrixData.value.techniques, (tech) => {
-                    return openBlock(), createElementBlock("tr", { key: tech }, [
-                      createBaseVNode("td", _hoisted_12, toDisplayString(tech), 1),
-                      (openBlock(true), createElementBlock(Fragment, null, renderList(matrixData.value.genres, (genre) => {
-                        var _a, _b, _c, _d;
-                        return openBlock(), createElementBlock("td", {
-                          key: genre,
-                          style: normalizeStyle({
-                            backgroundColor: cellBg(((_a = matrixData.value.techGenre[tech]) == null ? void 0 : _a[genre]) || 0, heatmaxCount(matrixData.value)),
-                            color: cellFg(((_b = matrixData.value.techGenre[tech]) == null ? void 0 : _b[genre]) || 0, heatmaxCount(matrixData.value))
-                          }),
-                          title: `${tech} × ${genre}: ${((_c = matrixData.value.techGenre[tech]) == null ? void 0 : _c[genre]) || 0}`
-                        }, toDisplayString((((_d = matrixData.value.techGenre[tech]) == null ? void 0 : _d[genre]) || 0) > 0 ? matrixData.value.techGenre[tech][genre] : ""), 13, _hoisted_13);
-                      }), 128)),
-                      createBaseVNode("td", _hoisted_14, toDisplayString(matrixData.value.techTotal[tech]), 1)
-                    ]);
-                  }), 128))
-                ])
-              ])
-            ]),
-            _cache[10] || (_cache[10] = createBaseVNode("div", { class: "color-scale-bar" }, [
-              createBaseVNode("span", null, "Fewer"),
-              createBaseVNode("div", { class: "color-scale-gradient" }),
-              createBaseVNode("span", null, "More")
-            ], -1))
-          ])) : createCommentVNode("", true)
+          ])
         ], 64))
       ]);
     };
@@ -360,4 +364,4 @@ const _sfc_main = {
 export {
   _sfc_main as default
 };
-//# sourceMappingURL=AnalysesView-BUIRnWEB.js.map
+//# sourceMappingURL=AnalysesView-CflKZIBn.js.map

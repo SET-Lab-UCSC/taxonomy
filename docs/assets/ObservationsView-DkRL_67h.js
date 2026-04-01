@@ -1,5 +1,5 @@
-import { u as useDataStore, o as onMounted, c as createElementBlock, a as createVNode, b as unref, t as toDisplayString, F as Fragment, d as createBaseVNode, e as computed, f as createCommentVNode, r as renderList, g as ref, h as openBlock, i as createBlock, _ as _sfc_main$2, n as normalizeClass } from "./index-MAtazTRy.js";
-import { _ as _sfc_main$1 } from "./ObservationModal-DplJ40EG.js";
+import { u as useDataStore, o as onMounted, c as createElementBlock, a as createVNode, b as unref, t as toDisplayString, F as Fragment, d as createBaseVNode, e as computed, f as createCommentVNode, r as renderList, g as ref, h as openBlock, i as createBlock, _ as _sfc_main$2, n as normalizeClass } from "./index-HcNk-XNx.js";
+import { _ as _sfc_main$1 } from "./ObservationModal-BC_QVNYl.js";
 const _hoisted_1 = { class: "main-content" };
 const _hoisted_2 = {
   key: 0,
@@ -35,16 +35,12 @@ const _hoisted_23 = ["onClick"];
 const _hoisted_24 = { class: "activity-filter-section" };
 const _hoisted_25 = { class: "activity-filter-bar" };
 const _hoisted_26 = ["onClick"];
-const _hoisted_27 = { class: "activity-filter-section" };
-const _hoisted_28 = { class: "activity-filter-bar" };
-const _hoisted_29 = ["onClick"];
 const _sfc_main = {
   __name: "ObservationsView",
   setup(__props) {
     const store = useDataStore();
     onMounted(() => store.load());
     const activeFilters = ref({
-      Application: /* @__PURE__ */ new Set(),
       Interaction_Technique: /* @__PURE__ */ new Set(),
       Activity: /* @__PURE__ */ new Set(),
       Task: /* @__PURE__ */ new Set(),
@@ -60,7 +56,6 @@ const _sfc_main = {
         return [...vals].sort();
       });
     }
-    const allApps = uniqueChipValues("Application");
     const allTechniques = uniqueChipValues("Interaction_Technique");
     const allActivities = uniqueChipValues("Activity");
     const allTasks = uniqueChipValues("Task");
@@ -121,74 +116,62 @@ const _sfc_main = {
                 }, "✕ Clear all")) : createCommentVNode("", true)
               ]),
               createBaseVNode("div", _hoisted_12, [
-                _cache[4] || (_cache[4] = createBaseVNode("div", { class: "activity-filter-label" }, "Application", -1)),
+                _cache[4] || (_cache[4] = createBaseVNode("div", { class: "activity-filter-label" }, "Interaction Technique", -1)),
                 createBaseVNode("div", _hoisted_13, [
-                  (openBlock(true), createElementBlock(Fragment, null, renderList(unref(allApps), (v) => {
-                    return openBlock(), createElementBlock("button", {
-                      key: v,
-                      class: normalizeClass(["activity-chip", { active: activeFilters.value.Application.has(v) }]),
-                      onClick: ($event) => toggle("Application", v)
-                    }, toDisplayString(v), 11, _hoisted_14);
-                  }), 128))
-                ])
-              ]),
-              createBaseVNode("div", _hoisted_15, [
-                _cache[5] || (_cache[5] = createBaseVNode("div", { class: "activity-filter-label" }, "Interaction Technique", -1)),
-                createBaseVNode("div", _hoisted_16, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(allTechniques), (v) => {
                     return openBlock(), createElementBlock("button", {
                       key: v,
                       class: normalizeClass(["activity-chip", { active: activeFilters.value.Interaction_Technique.has(v) }]),
                       onClick: ($event) => toggle("Interaction_Technique", v)
-                    }, toDisplayString(v), 11, _hoisted_17);
+                    }, toDisplayString(v), 11, _hoisted_14);
                   }), 128))
                 ])
               ]),
-              createBaseVNode("div", _hoisted_18, [
-                _cache[6] || (_cache[6] = createBaseVNode("div", { class: "activity-filter-label" }, "Activity", -1)),
-                createBaseVNode("div", _hoisted_19, [
+              createBaseVNode("div", _hoisted_15, [
+                _cache[5] || (_cache[5] = createBaseVNode("div", { class: "activity-filter-label" }, "Activity", -1)),
+                createBaseVNode("div", _hoisted_16, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(allActivities), (v) => {
                     return openBlock(), createElementBlock("button", {
                       key: v,
                       class: normalizeClass(["activity-chip", { active: activeFilters.value.Activity.has(v) }]),
                       onClick: ($event) => toggle("Activity", v)
-                    }, toDisplayString(v), 11, _hoisted_20);
+                    }, toDisplayString(v), 11, _hoisted_17);
                   }), 128))
                 ])
               ]),
-              createBaseVNode("div", _hoisted_21, [
-                _cache[7] || (_cache[7] = createBaseVNode("div", { class: "activity-filter-label" }, "Task", -1)),
-                createBaseVNode("div", _hoisted_22, [
+              createBaseVNode("div", _hoisted_18, [
+                _cache[6] || (_cache[6] = createBaseVNode("div", { class: "activity-filter-label" }, "Task", -1)),
+                createBaseVNode("div", _hoisted_19, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(allTasks), (v) => {
                     return openBlock(), createElementBlock("button", {
                       key: v,
                       class: normalizeClass(["activity-chip", { active: activeFilters.value.Task.has(v) }]),
                       onClick: ($event) => toggle("Task", v)
-                    }, toDisplayString(v), 11, _hoisted_23);
+                    }, toDisplayString(v), 11, _hoisted_20);
                   }), 128))
                 ])
               ]),
-              createBaseVNode("div", _hoisted_24, [
-                _cache[8] || (_cache[8] = createBaseVNode("div", { class: "activity-filter-label" }, "Handedness", -1)),
-                createBaseVNode("div", _hoisted_25, [
+              createBaseVNode("div", _hoisted_21, [
+                _cache[7] || (_cache[7] = createBaseVNode("div", { class: "activity-filter-label" }, "Handedness", -1)),
+                createBaseVNode("div", _hoisted_22, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(allHandedness), (v) => {
                     return openBlock(), createElementBlock("button", {
                       key: v,
                       class: normalizeClass(["activity-chip", { active: activeFilters.value.Handedness.has(v) }]),
                       onClick: ($event) => toggle("Handedness", v)
-                    }, toDisplayString(v), 11, _hoisted_26);
+                    }, toDisplayString(v), 11, _hoisted_23);
                   }), 128))
                 ])
               ]),
-              createBaseVNode("div", _hoisted_27, [
-                _cache[9] || (_cache[9] = createBaseVNode("div", { class: "activity-filter-label" }, "Multi-action", -1)),
-                createBaseVNode("div", _hoisted_28, [
+              createBaseVNode("div", _hoisted_24, [
+                _cache[8] || (_cache[8] = createBaseVNode("div", { class: "activity-filter-label" }, "Multi-action", -1)),
+                createBaseVNode("div", _hoisted_25, [
                   (openBlock(true), createElementBlock(Fragment, null, renderList(unref(allMultiAction), (v) => {
                     return openBlock(), createElementBlock("button", {
                       key: v,
                       class: normalizeClass(["activity-chip", { active: activeFilters.value.Multi_Action.has(v) }]),
                       onClick: ($event) => toggle("Multi_Action", v)
-                    }, toDisplayString(v), 11, _hoisted_29);
+                    }, toDisplayString(v), 11, _hoisted_26);
                   }), 128))
                 ])
               ])
@@ -207,4 +190,4 @@ const _sfc_main = {
 export {
   _sfc_main as default
 };
-//# sourceMappingURL=ObservationsView-CARr4WLY.js.map
+//# sourceMappingURL=ObservationsView-DkRL_67h.js.map

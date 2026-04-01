@@ -72,13 +72,13 @@ watch(() => store.applications, (apps) => {
     <div v-if="store.loading" class="loading-state">Loading…</div>
     <div v-else-if="store.error" class="chart-error">Error: {{ store.error }}</div>
     <template v-else>
-      <div class="page-header">
-        <h2 class="page-title">Applications</h2>
-        <p class="page-description">Viewing {{ filteredApps.length }} application{{ filteredApps.length === 1 ? '' : 's' }}</p>
+      <div style="margin-bottom:0.75rem;">
+        <h2 class="page-title" style="margin-bottom:0;">Applications</h2>
+        <p style="color:#6b7280; font-size:0.9rem; margin:0;">Viewing {{ filteredApps.length }} application{{ filteredApps.length === 1 ? '' : 's' }}</p>
       </div>
 
       <!-- Genre filter -->
-      <div v-if="allGenres.length" class="filter-panel" style="position:static; border-left:none; padding-left:0; border-bottom:1px solid #e5e7eb; margin-bottom:1.5rem; padding-bottom:1rem;">
+      <div v-if="allGenres.length" class="filter-panel" style="position:static; border-left:none; padding-left:0; border-bottom:1px solid #e5e7eb; margin-bottom:1.5rem; padding-bottom:1rem; width:100%;">
         <div class="filter-panel-header">
           <span class="filter-panel-title">Filter by Genre</span>
           <button v-if="activeGenres.size > 0" class="activity-chip-clear" @click="clearGenres">✕ Clear</button>

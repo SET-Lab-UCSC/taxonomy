@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObservationsView-CARr4WLY.js","assets/ObservationModal-DplJ40EG.js","assets/ApplicationsView-zJ7XGeT_.js","assets/AnalysesView-BUIRnWEB.js","assets/auto-ByddkvQv.js","assets/SankeyView-C1zNDneC.js","assets/transform-BznNK3nw.js","assets/_plugin-vue_export-helper-1tPrXgE0.js","assets/init-CTO7spbL.js","assets/SankeyView-BHfBOeJu.css","assets/ChordView-xtcXI88-.js","assets/ChordView-B0WXxA2s.css","assets/RadarView-B2Ar4FYs.js","assets/RadarView-B6e7HQ15.css","assets/ComplexityBubbleView-B1cOVZ0a.js","assets/ComplexityBubbleView-BOUcx0Uw.css","assets/BipartiteNetworkView-Dc_2navk.js","assets/BipartiteNetworkView-CRThBO_u.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ObservationsView-DkRL_67h.js","assets/ObservationModal-BC_QVNYl.js","assets/ApplicationsView-Damfyb7g.js","assets/AnalysesView-CflKZIBn.js","assets/transform-BznNK3nw.js","assets/sankeyLinkHorizontal-D6Slmp3Z.js","assets/auto-ByddkvQv.js","assets/SankeyView-BFFYaEMD.js","assets/_plugin-vue_export-helper-1tPrXgE0.js","assets/init-CTO7spbL.js","assets/SankeyView-BHfBOeJu.css","assets/ChordView-4HXHqHnc.js","assets/ChordView-B0WXxA2s.css","assets/RadarView-CQcBNLV0.js","assets/RadarView-B6e7HQ15.css","assets/ComplexityBubbleView-DJZe0pMH.js","assets/ComplexityBubbleView-BOUcx0Uw.css","assets/BipartiteNetworkView-CrLtw3uV.js","assets/BipartiteNetworkView-CRThBO_u.css"])))=>i.map(i=>d[i]);
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -9351,7 +9351,7 @@ const _hoisted_2$4 = {
   key: 1,
   class: "technique-card-placeholder gradient-placeholder"
 };
-const _hoisted_3$4 = { class: "technique-card-name" };
+const _hoisted_3$3 = { class: "technique-card-name" };
 const _sfc_main$6 = {
   __name: "TechniqueCard",
   props: {
@@ -9377,7 +9377,7 @@ const _sfc_main$6 = {
           class: "technique-card-thumb",
           alt: __props.technique.Interaction_Technique
         }, null, 8, _hoisted_1$5)) : (openBlock(), createElementBlock("div", _hoisted_2$4)),
-        createBaseVNode("div", _hoisted_3$4, toDisplayString(__props.technique.Interaction_Technique), 1)
+        createBaseVNode("div", _hoisted_3$3, toDisplayString(__props.technique.Interaction_Technique), 1)
       ]);
     };
   }
@@ -9387,7 +9387,7 @@ const _hoisted_2$3 = {
   key: 2,
   class: "obs-card-image-placeholder gradient-placeholder"
 };
-const _hoisted_3$3 = { class: "obs-card-info" };
+const _hoisted_3$2 = { class: "obs-card-info" };
 const _hoisted_4$1 = { class: "obs-card-title" };
 const _hoisted_5$1 = { class: "obs-card-app" };
 const _sfc_main$5 = {
@@ -9437,7 +9437,7 @@ const _sfc_main$5 = {
           class: "obs-card-image",
           alt: __props.observation.Title
         }, null, 8, _hoisted_1$4)) : (openBlock(), createElementBlock("div", _hoisted_2$3)),
-        createBaseVNode("div", _hoisted_3$3, [
+        createBaseVNode("div", _hoisted_3$2, [
           createBaseVNode("div", _hoisted_4$1, toDisplayString(__props.observation.Title), 1),
           createBaseVNode("div", _hoisted_5$1, toDisplayString(__props.observation.Application), 1)
         ])
@@ -9453,7 +9453,7 @@ const _hoisted_2$2 = {
   key: 0,
   class: "technique-modal-obs"
 };
-const _hoisted_3$2 = {
+const _hoisted_3$1 = {
   key: 1,
   style: { "color": "#9ca3af", "font-size": "0.875rem" }
 };
@@ -9488,7 +9488,7 @@ const _sfc_main$4 = {
                   clickable: false
                 }, null, 8, ["observation"]);
               }), 128))
-            ])) : (openBlock(), createElementBlock("p", _hoisted_3$2, "No observations for this technique."))
+            ])) : (openBlock(), createElementBlock("p", _hoisted_3$1, "No observations for this technique."))
           ])
         ])) : createCommentVNode("", true)
       ]);
@@ -9500,7 +9500,7 @@ const _hoisted_2$1 = {
   key: 0,
   class: "loading-state"
 };
-const _hoisted_3$1 = {
+const _hoisted_3 = {
   key: 1,
   class: "chart-error"
 };
@@ -9585,10 +9585,12 @@ const _sfc_main$3 = {
     }
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("main", _hoisted_1$2, [
-        unref(store).loading ? (openBlock(), createElementBlock("div", _hoisted_2$1, "Loading…")) : unref(store).error ? (openBlock(), createElementBlock("div", _hoisted_3$1, "Error: " + toDisplayString(unref(store).error), 1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
-          _cache[6] || (_cache[6] = createBaseVNode("div", { class: "page-header" }, [
-            createBaseVNode("h2", { class: "page-title" }, "Interaction Techniques"),
-            createBaseVNode("p", { class: "page-description" }, " Browse the catalogue of spatial interaction techniques documented in the Spatial Interaction Vault. Click a card to explore observations. ")
+        unref(store).loading ? (openBlock(), createElementBlock("div", _hoisted_2$1, "Loading…")) : unref(store).error ? (openBlock(), createElementBlock("div", _hoisted_3, "Error: " + toDisplayString(unref(store).error), 1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
+          _cache[6] || (_cache[6] = createBaseVNode("div", {
+            class: "page-header",
+            style: { "margin-bottom": "1rem" }
+          }, [
+            createBaseVNode("h2", { class: "page-title" }, "Interaction Techniques")
           ], -1)),
           createBaseVNode("div", _hoisted_4, [
             createBaseVNode("div", _hoisted_5, [
@@ -9687,16 +9689,16 @@ const _sfc_main$3 = {
 };
 const routes = [
   { path: "/", component: _sfc_main$3 },
-  { path: "/observations", component: () => __vitePreload(() => import("./ObservationsView-CARr4WLY.js"), true ? __vite__mapDeps([0,1]) : void 0) },
-  { path: "/applications", component: () => __vitePreload(() => import("./ApplicationsView-zJ7XGeT_.js"), true ? __vite__mapDeps([2,1]) : void 0) },
-  { path: "/analyses", component: () => __vitePreload(() => import("./AnalysesView-BUIRnWEB.js"), true ? __vite__mapDeps([3,4]) : void 0) },
-  { path: "/viz/sankey", component: () => __vitePreload(() => import("./SankeyView-C1zNDneC.js"), true ? __vite__mapDeps([5,6,7,8,9]) : void 0) },
-  { path: "/viz/embodiment", component: () => __vitePreload(() => import("./EmbodimentView-Ny8Nahqt.js"), true ? [] : void 0) },
-  { path: "/viz/chord", component: () => __vitePreload(() => import("./ChordView-xtcXI88-.js"), true ? __vite__mapDeps([10,6,7,8,11]) : void 0) },
-  { path: "/viz/radar", component: () => __vitePreload(() => import("./RadarView-B2Ar4FYs.js"), true ? __vite__mapDeps([12,7,13]) : void 0) },
-  { path: "/viz/feedback", component: () => __vitePreload(() => import("./FeedbackMatrixView-Dz2Dlrbc.js"), true ? [] : void 0) },
-  { path: "/viz/complexity", component: () => __vitePreload(() => import("./ComplexityBubbleView-B1cOVZ0a.js"), true ? __vite__mapDeps([14,4,7,15]) : void 0) },
-  { path: "/viz/network", component: () => __vitePreload(() => import("./BipartiteNetworkView-Dc_2navk.js"), true ? __vite__mapDeps([16,6,7,17]) : void 0) }
+  { path: "/observations", component: () => __vitePreload(() => import("./ObservationsView-DkRL_67h.js"), true ? __vite__mapDeps([0,1]) : void 0) },
+  { path: "/applications", component: () => __vitePreload(() => import("./ApplicationsView-Damfyb7g.js"), true ? __vite__mapDeps([2,1]) : void 0) },
+  { path: "/analyses", component: () => __vitePreload(() => import("./AnalysesView-CflKZIBn.js"), true ? __vite__mapDeps([3,4,5,6]) : void 0) },
+  { path: "/viz/sankey", component: () => __vitePreload(() => import("./SankeyView-BFFYaEMD.js"), true ? __vite__mapDeps([7,4,5,8,9,10]) : void 0) },
+  { path: "/viz/embodiment", component: () => __vitePreload(() => import("./EmbodimentView-EFHmmQzB.js"), true ? [] : void 0) },
+  { path: "/viz/chord", component: () => __vitePreload(() => import("./ChordView-4HXHqHnc.js"), true ? __vite__mapDeps([11,4,8,9,12]) : void 0) },
+  { path: "/viz/radar", component: () => __vitePreload(() => import("./RadarView-CQcBNLV0.js"), true ? __vite__mapDeps([13,8,14]) : void 0) },
+  { path: "/viz/feedback", component: () => __vitePreload(() => import("./FeedbackMatrixView-BUvdhNSK.js"), true ? [] : void 0) },
+  { path: "/viz/complexity", component: () => __vitePreload(() => import("./ComplexityBubbleView-DJZe0pMH.js"), true ? __vite__mapDeps([15,6,8,16]) : void 0) },
+  { path: "/viz/network", component: () => __vitePreload(() => import("./BipartiteNetworkView-CrLtw3uV.js"), true ? __vite__mapDeps([17,4,8,18]) : void 0) }
 ];
 const router = createRouter({
   history: createWebHistory("https://set-lab-ucsc.github.io/taxonomy/"),
@@ -9727,23 +9729,9 @@ const _sfc_main$2 = {
 };
 const _hoisted_1 = { class: "sub-nav" };
 const _hoisted_2 = { class: "sub-nav-links" };
-const _hoisted_3 = {
-  key: 0,
-  class: "sub-nav-dropdown-menu"
-};
 const _sfc_main$1 = {
   __name: "SubNav",
   setup(__props) {
-    const vizOpen = /* @__PURE__ */ ref(false);
-    const vizLinks = [
-      { to: "/viz/sankey", label: "Taxonomy Flow (Sankey)" },
-      { to: "/viz/embodiment", label: "Embodiment Spectrum" },
-      { to: "/viz/chord", label: "Action–Technique Chord" },
-      { to: "/viz/radar", label: "Application Profiles (Radar)" },
-      { to: "/viz/feedback", label: "Feedback Matrix" },
-      { to: "/viz/complexity", label: "Convergence vs. Complexity" },
-      { to: "/viz/network", label: "Technique Adoption Network" }
-    ];
     return (_ctx, _cache) => {
       const _component_RouterLink = resolveComponent("RouterLink");
       return openBlock(), createElementBlock("nav", _hoisted_1, [
@@ -9752,7 +9740,7 @@ const _sfc_main$1 = {
             to: "/",
             class: "sub-nav-link"
           }, {
-            default: withCtx(() => [..._cache[3] || (_cache[3] = [
+            default: withCtx(() => [..._cache[0] || (_cache[0] = [
               createTextVNode("Interaction Techniques ›", -1)
             ])]),
             _: 1
@@ -9761,7 +9749,7 @@ const _sfc_main$1 = {
             to: "/observations",
             class: "sub-nav-link"
           }, {
-            default: withCtx(() => [..._cache[4] || (_cache[4] = [
+            default: withCtx(() => [..._cache[1] || (_cache[1] = [
               createTextVNode("Observations ›", -1)
             ])]),
             _: 1
@@ -9770,7 +9758,7 @@ const _sfc_main$1 = {
             to: "/applications",
             class: "sub-nav-link"
           }, {
-            default: withCtx(() => [..._cache[5] || (_cache[5] = [
+            default: withCtx(() => [..._cache[2] || (_cache[2] = [
               createTextVNode("Applications ›", -1)
             ])]),
             _: 1
@@ -9779,33 +9767,11 @@ const _sfc_main$1 = {
             to: "/analyses",
             class: "sub-nav-link"
           }, {
-            default: withCtx(() => [..._cache[6] || (_cache[6] = [
+            default: withCtx(() => [..._cache[3] || (_cache[3] = [
               createTextVNode("Analyses ›", -1)
             ])]),
             _: 1
-          }),
-          createBaseVNode("div", {
-            class: "sub-nav-dropdown",
-            onMouseenter: _cache[1] || (_cache[1] = ($event) => vizOpen.value = true),
-            onMouseleave: _cache[2] || (_cache[2] = ($event) => vizOpen.value = false)
-          }, [
-            _cache[7] || (_cache[7] = createBaseVNode("span", { class: "sub-nav-link sub-nav-dropdown-trigger" }, "Visualizations ›", -1)),
-            vizOpen.value ? (openBlock(), createElementBlock("div", _hoisted_3, [
-              (openBlock(), createElementBlock(Fragment, null, renderList(vizLinks, (link) => {
-                return createVNode(_component_RouterLink, {
-                  key: link.to,
-                  to: link.to,
-                  class: "sub-nav-dropdown-item",
-                  onClick: _cache[0] || (_cache[0] = ($event) => vizOpen.value = false)
-                }, {
-                  default: withCtx(() => [
-                    createTextVNode(toDisplayString(link.label), 1)
-                  ]),
-                  _: 2
-                }, 1032, ["to"]);
-              }), 64))
-            ])) : createCommentVNode("", true)
-          ], 32)
+          })
         ])
       ]);
     };
@@ -9844,19 +9810,20 @@ export {
   openBlock as h,
   createBlock as i,
   withModifiers as j,
-  createStaticVNode as k,
-  normalizeStyle as l,
+  nextTick as k,
+  createStaticVNode as l,
   onBeforeUnmount as m,
   normalizeClass as n,
   onMounted as o,
   createTextVNode as p,
-  onUnmounted as q,
+  normalizeStyle as q,
   renderList as r,
-  withDirectives as s,
+  onUnmounted as s,
   toDisplayString as t,
   useDataStore as u,
-  vShow as v,
+  withDirectives as v,
   watch as w,
-  reactive as x
+  vShow as x,
+  reactive as y
 };
-//# sourceMappingURL=index-MAtazTRy.js.map
+//# sourceMappingURL=index-HcNk-XNx.js.map

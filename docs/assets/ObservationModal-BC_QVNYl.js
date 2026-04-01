@@ -1,4 +1,4 @@
-import { i as createBlock, h as openBlock, c as createElementBlock, f as createCommentVNode, d as createBaseVNode, F as Fragment, r as renderList, t as toDisplayString, j as withModifiers, T as Teleport } from "./index-MAtazTRy.js";
+import { i as createBlock, h as openBlock, c as createElementBlock, f as createCommentVNode, d as createBaseVNode, F as Fragment, r as renderList, t as toDisplayString, j as withModifiers, T as Teleport } from "./index-HcNk-XNx.js";
 const _hoisted_1 = { class: "modal-content" };
 const _hoisted_2 = ["src", "alt"];
 const _hoisted_3 = {
@@ -28,7 +28,6 @@ const _sfc_main = {
       "Feedforward",
       "Handedness",
       "Multi_Action",
-      "XR",
       "Interface_Elements",
       "Interaction_Technique"
     ];
@@ -70,4 +69,4 @@ const _sfc_main = {
 export {
   _sfc_main as _
 };
-//# sourceMappingURL=ObservationModal-DplJ40EG.js.map
+//# sourceMappingURL=ObservationModal-BC_QVNYl.js.map

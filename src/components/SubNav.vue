@@ -21,6 +21,7 @@ const vizLinks = [
       <RouterLink to="/observations" class="sub-nav-link">Observations ›</RouterLink>
       <RouterLink to="/applications" class="sub-nav-link">Applications ›</RouterLink>
       <RouterLink to="/analyses" class="sub-nav-link">Analyses ›</RouterLink>
+      <!-- Visualizations nav hidden for submission
       <div class="sub-nav-dropdown" @mouseenter="vizOpen = true" @mouseleave="vizOpen = false">
         <span class="sub-nav-link sub-nav-dropdown-trigger">Visualizations ›</span>
         <div v-if="vizOpen" class="sub-nav-dropdown-menu">
@@ -33,6 +34,7 @@ const vizLinks = [
           >{{ link.label }}</RouterLink>
         </div>
       </div>
+      -->
     </div>
   </nav>
 </template>

@@ -1,5 +1,5 @@
-import { u as useDataStore, o as onMounted, e as computed, g as ref, w as watch, c as createElementBlock, a as createVNode, b as unref, t as toDisplayString, F as Fragment, d as createBaseVNode, f as createCommentVNode, r as renderList, h as openBlock, n as normalizeClass, i as createBlock, _ as _sfc_main$2 } from "./index-MAtazTRy.js";
-import { _ as _sfc_main$1 } from "./ObservationModal-DplJ40EG.js";
+import { u as useDataStore, o as onMounted, e as computed, g as ref, w as watch, c as createElementBlock, a as createVNode, b as unref, t as toDisplayString, F as Fragment, d as createBaseVNode, f as createCommentVNode, r as renderList, h as openBlock, n as normalizeClass, i as createBlock, _ as _sfc_main$2 } from "./index-HcNk-XNx.js";
+import { _ as _sfc_main$1 } from "./ObservationModal-BC_QVNYl.js";
 const _hoisted_1 = { class: "main-content" };
 const _hoisted_2 = {
   key: 0,
@@ -9,12 +9,12 @@ const _hoisted_3 = {
   key: 1,
   class: "chart-error"
 };
-const _hoisted_4 = { class: "page-header" };
-const _hoisted_5 = { class: "page-description" };
+const _hoisted_4 = { style: { "margin-bottom": "0.75rem" } };
+const _hoisted_5 = { style: { "color": "#6b7280", "font-size": "0.9rem", "margin": "0" } };
 const _hoisted_6 = {
   key: 0,
   class: "filter-panel",
-  style: { "position": "static", "border-left": "none", "padding-left": "0", "border-bottom": "1px solid #e5e7eb", "margin-bottom": "1.5rem", "padding-bottom": "1rem" }
+  style: { "position": "static", "border-left": "none", "padding-left": "0", "border-bottom": "1px solid #e5e7eb", "margin-bottom": "1.5rem", "padding-bottom": "1rem", "width": "100%" }
 };
 const _hoisted_7 = { class: "filter-panel-header" };
 const _hoisted_8 = { class: "activity-filter-bar" };
@@ -89,7 +89,10 @@ const _sfc_main = {
       return openBlock(), createElementBlock("main", _hoisted_1, [
         unref(store).loading ? (openBlock(), createElementBlock("div", _hoisted_2, "Loading…")) : unref(store).error ? (openBlock(), createElementBlock("div", _hoisted_3, "Error: " + toDisplayString(unref(store).error), 1)) : (openBlock(), createElementBlock(Fragment, { key: 2 }, [
           createBaseVNode("div", _hoisted_4, [
-            _cache[2] || (_cache[2] = createBaseVNode("h2", { class: "page-title" }, "Applications", -1)),
+            _cache[2] || (_cache[2] = createBaseVNode("h2", {
+              class: "page-title",
+              style: { "margin-bottom": "0" }
+            }, "Applications", -1)),
             createBaseVNode("p", _hoisted_5, "Viewing " + toDisplayString(filteredApps.value.length) + " application" + toDisplayString(filteredApps.value.length === 1 ? "" : "s"), 1)
           ]),
           allGenres.value.length ? (openBlock(), createElementBlock("div", _hoisted_6, [
@@ -162,4 +165,4 @@ const _sfc_main = {
 export {
   _sfc_main as default
 };
-//# sourceMappingURL=ApplicationsView-zJ7XGeT_.js.map
+//# sourceMappingURL=ApplicationsView-Damfyb7g.js.map

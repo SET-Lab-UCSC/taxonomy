@@ -78,12 +78,8 @@ function closeModal() {
     <div v-if="store.loading" class="loading-state">Loading…</div>
     <div v-else-if="store.error" class="chart-error">Error: {{ store.error }}</div>
     <template v-else>
-      <div class="page-header">
+      <div class="page-header" style="margin-bottom:1rem;">
         <h2 class="page-title">Interaction Techniques</h2>
-        <p class="page-description">
-          Browse the catalogue of spatial interaction techniques documented in the Spatial Interaction Vault.
-          Click a card to explore observations.
-        </p>
       </div>
 
       <div class="home-layout">

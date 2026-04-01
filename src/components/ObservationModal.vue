@@ -9,7 +9,7 @@ const emit = defineEmits(['close'])
 const fields = [
   'Title', 'Application', 'Activity', 'Task', 'Action',
   'Feedback', 'Feedforward', 'Handedness', 'Multi_Action',
-  'XR', 'Interface_Elements', 'Interaction_Technique',
+  'Interface_Elements', 'Interaction_Technique',
 ]
 </script>
 

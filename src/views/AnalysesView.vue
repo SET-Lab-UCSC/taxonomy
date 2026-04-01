@@ -1,5 +1,7 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
+import * as d3 from 'd3'
+import { sankey as d3Sankey, sankeyLinkHorizontal } from 'd3-sankey'
 import Chart from 'chart.js/auto'
 import { useDataStore } from '../stores/data.js'
 
@@ -165,14 +167,14 @@ function buildTechGenreMatrix(observations) {
     if (!app) return
     const genre = getGenre(app)
 
-    const techRaw = (obs.Interaction_Technique || "").trim()
-    if (!techRaw) return
-    const techs = techRaw.split(',').map(t => t.trim()).filter(Boolean)
+    const taskRaw = (obs.Task || "").trim()
+    if (!taskRaw) return
+    const tasks = taskRaw.split(',').map(t => t.trim()).filter(Boolean)
 
-    techs.forEach(tech => {
-      if (!techGenre[tech]) techGenre[tech] = {}
-      techGenre[tech][genre] = (techGenre[tech][genre] || 0) + 1
-      techTotal[tech] = (techTotal[tech] || 0) + 1
+    tasks.forEach(task => {
+      if (!techGenre[task]) techGenre[task] = {}
+      techGenre[task][genre] = (techGenre[task][genre] || 0) + 1
+      techTotal[task] = (techTotal[task] || 0) + 1
       genreSet.add(genre)
     })
   })
@@ -232,6 +234,11 @@ function renderFreqChart(matrix, stacked) {
             maxRotation: 45,
             minRotation: 30,
           },
+          title: {
+            display: true,
+            text: "Task",
+            font: { family: "'Work Sans', sans-serif", size: 12 },
+          },
         },
         y: {
           stacked,
@@ -267,11 +274,139 @@ function heatmaxCount(matrix) {
   return Math.max(...matrix.techniques.flatMap(t => matrix.genres.map(g => matrix.techGenre[t]?.[g] || 0)))
 }
 
+const sankeyContainer = ref(null)
+
+function renderActivityTaskSankey(observations) {
+  const el = sankeyContainer.value
+  if (!el) return
+
+  const width = el.clientWidth || 800
+  const height = 520
+  const margin = { top: 20, right: 180, bottom: 20, left: 180 }
+
+  d3.select(el).selectAll('*').remove()
+  const svg = d3.select(el)
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height)
+
+  // Fixed activity color palette
+  const ACTIVITY_COLORS = {
+    'Manipulation':    '#CD3735',
+    'Locomotion':      '#E98708',
+    'System Control':  '#FFCE7B',
+    'Activation':      '#a78bfa',
+    'Evading':         '#10b981',
+    'Creation':        '#3b82f6',
+    'Communication':   '#f472b6',
+  }
+  const ACTIVITY_COLOR_DEFAULT = '#6b7280'
+  const TASK_COLOR = 'rgba(107,114,128,0.75)'
+
+  function activityColor(name) {
+    return ACTIVITY_COLORS[name] || ACTIVITY_COLOR_DEFAULT
+  }
+
+  // Build link map: Activity → Task pair counts
+  const linkMap = {}
+  observations.forEach(obs => {
+    const activities = (obs.Activity || '').split(',').map(a => a.trim()).filter(Boolean)
+    const tasks = (obs.Task || '').split(',').map(t => t.trim()).filter(Boolean)
+    activities.forEach(act => {
+      tasks.forEach(task => {
+        const key = `${act}|||${task}`
+        linkMap[key] = (linkMap[key] || 0) + 1
+      })
+    })
+  })
+
+  if (Object.keys(linkMap).length === 0) return
+
+  // Collect unique activity and task names
+  const activityNames = new Set()
+  const taskNames = new Set()
+  Object.keys(linkMap).forEach(k => {
+    const [a, t] = k.split('|||')
+    activityNames.add(a)
+    taskNames.add(t)
+  })
+
+  // Build prefixed node keys to guarantee no overlap between sides
+  // Even if a name appears in both columns, act:X and task:X are distinct nodes
+  const rawNodes = []
+  const nodeIndexMap = {}
+
+  activityNames.forEach(name => {
+    const key = `act:${name}`
+    nodeIndexMap[key] = rawNodes.length
+    rawNodes.push({ id: key, label: name, isActivity: true })
+  })
+  taskNames.forEach(name => {
+    const key = `task:${name}`
+    nodeIndexMap[key] = rawNodes.length
+    rawNodes.push({ id: key, label: name, isActivity: false })
+  })
+
+  const rawLinks = Object.entries(linkMap).map(([k, v]) => {
+    const [a, t] = k.split('|||')
+    return {
+      source: nodeIndexMap[`act:${a}`],
+      target: nodeIndexMap[`task:${t}`],
+      value: v,
+      activityName: a
+    }
+  })
+
+  const { nodes: sNodes, links: sLinks } = d3Sankey()
+    .nodeWidth(14)
+    .nodePadding(12)
+    .extent([[margin.left, margin.top], [width - margin.right, height - margin.bottom]])(
+      {
+        nodes: rawNodes.map(d => ({ ...d })),
+        links: rawLinks.map(d => ({ ...d }))
+      }
+    )
+
+  // Links
+  svg.append('g').selectAll('path')
+    .data(sLinks)
+    .join('path')
+    .attr('d', sankeyLinkHorizontal())
+    .attr('fill', 'none')
+    .attr('stroke', d => activityColor(d.activityName))
+    .attr('stroke-width', d => Math.max(1, d.width))
+    .attr('stroke-opacity', 0.3)
+    .append('title')
+    .text(d => `${d.source.label} → ${d.target.label}: ${d.value}`)
+
+  // Node rectangles
+  const nodeG = svg.append('g').selectAll('g').data(sNodes).join('g')
+  nodeG.append('rect')
+    .attr('x', d => d.x0)
+    .attr('y', d => d.y0)
+    .attr('width', d => d.x1 - d.x0)
+    .attr('height', d => Math.max(1, d.y1 - d.y0))
+    .attr('fill', d => d.isActivity ? activityColor(d.label) : TASK_COLOR)
+
+  // Labels: activity nodes → label LEFT of node; task nodes → label RIGHT of node
+  nodeG.append('text')
+    .attr('x', d => d.isActivity ? d.x0 - 8 : d.x1 + 8)
+    .attr('y', d => (d.y0 + d.y1) / 2)
+    .attr('dy', '0.35em')
+    .attr('text-anchor', d => d.isActivity ? 'end' : 'start')
+    .attr('font-family', "'Work Sans', sans-serif")
+    .attr('font-size', 11)
+    .attr('fill', '#374151')
+    .text(d => d.label)
+}
+
 onMounted(async () => {
   await store.load()
   renderConvergenceChart(store.observations)
   matrixData.value = buildTechGenreMatrix(store.observations)
-  renderFreqChart(matrixData.value, isStacked.value)
+  renderFreqChart(matrixData.value, true)
+  await nextTick()
+  renderActivityTaskSankey(store.observations)
 })
 </script>
 
@@ -319,67 +454,18 @@ onMounted(async () => {
 
       <!-- Chart 2: Technique Frequency by Genre -->
       <div class="viz-card">
-        <div class="viz-card-title">Interaction Techniques × Genre</div>
+        <div class="viz-card-title">Tasks × Genre</div>
         <p class="page-description" style="margin-bottom:1rem;">
-          A stacked bar chart showing how often each interaction technique appears, broken down by application
-          genre. Each bar represents one technique sorted by total observation count (left = most frequent).
-          Stack segments show which genres contribute to that technique's usage — revealing which techniques are
-          genre-specific versus cross-genre. Toggle between stacked and grouped views.
+          Task frequency broken down by application genre. Reveals which tasks are cross-genre standards and which are genre-specific.
         </p>
-
-        <div class="toggle-group">
-          <button
-            class="toggle-btn"
-            :class="{ active: isStacked }"
-            @click="setStacked(true)"
-          >Stacked</button>
-          <button
-            class="toggle-btn"
-            :class="{ active: !isStacked }"
-            @click="setStacked(false)"
-          >Grouped</button>
-        </div>
 
         <div class="canvas-wrapper-tall">
           <canvas ref="freqChart"></canvas>
         </div>
       </div>
 
-      <!-- Genre Breakdown Heatmap -->
-      <div v-if="matrixData" class="viz-card">
-        <div class="viz-card-title">Genre Breakdown per Technique</div>
-        <div class="matrix-wrapper">
-          <table class="matrix-table">
-            <thead>
-              <tr>
-                <th class="row-header">Technique</th>
-                <th v-for="genre in matrixData.genres" :key="genre">{{ genre }}</th>
-                <th style="font-weight:700;">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="tech in matrixData.techniques" :key="tech">
-                <td class="row-label">{{ tech }}</td>
-                <td
-                  v-for="genre in matrixData.genres"
-                  :key="genre"
-                  :style="{
-                    backgroundColor: cellBg(matrixData.techGenre[tech]?.[genre] || 0, heatmaxCount(matrixData)),
-                    color: cellFg(matrixData.techGenre[tech]?.[genre] || 0, heatmaxCount(matrixData)),
-                  }"
-                  :title="`${tech} × ${genre}: ${matrixData.techGenre[tech]?.[genre] || 0}`"
-                >{{ (matrixData.techGenre[tech]?.[genre] || 0) > 0 ? matrixData.techGenre[tech][genre] : '' }}</td>
-                <td style="font-weight:700; color:#CD3735;">{{ matrixData.techTotal[tech] }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="color-scale-bar">
-          <span>Fewer</span>
-          <div class="color-scale-gradient"></div>
-          <span>More</span>
-        </div>
-      </div>
+      <!-- Genre Breakdown Heatmap removed -->
+
     </template>
   </main>
 </template>
